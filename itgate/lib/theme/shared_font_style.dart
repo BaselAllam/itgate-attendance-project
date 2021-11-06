@@ -8,3 +8,5 @@ TextStyle primaryFontStyle = TextStyle(color: primaryColor, fontSize: 20.0, font
 TextStyle primaryBlackFontStyle = TextStyle(color: blackColor, fontSize: 20.0, fontWeight: FontWeight.bold);
 
 TextStyle secondaryTextStyle = TextStyle(color: secondaryColor, fontSize: 18.0, fontWeight: FontWeight.bold);
+
+TextStyle subTextStyle = TextStyle(color: Colors.grey, fontSize: 18.0, fontWeight: FontWeight.bold);
