@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:itgate/screens/course_attendance.dart';
 import 'package:itgate/theme/shared_font_style.dart';
 
 
@@ -22,7 +23,9 @@ class _CourseItemState extends State<CourseItem> {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-
+        if(widget.type == 'enrolled') {
+          Navigator.push(context, MaterialPageRoute(builder: (_) {return CourseAttendance();}));
+        }
       },
       child: Card(
         elevation: 5.0,
@@ -57,7 +60,7 @@ class _CourseItemState extends State<CourseItem> {
               ),
               ListTile(
                 title: Text(
-                  '2000 EGP | 520 Hours',
+                  '2000 EGP | 520 Hours | Offline',
                   style: secondaryTextStyle
                 ),
                 trailing: DecoratedBox(

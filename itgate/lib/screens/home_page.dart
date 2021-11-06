@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:itgate/theme/shared_color.dart';
 import 'package:itgate/theme/shared_font_style.dart';
-import 'package:itgate/widgets/item.dart';
+import 'package:itgate/widgets/course_item.dart';
 
 
 

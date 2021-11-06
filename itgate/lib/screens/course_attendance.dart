@@ -1,40 +1,37 @@
 import 'package:flutter/material.dart';
+import 'package:itgate/theme/shared_color.dart';
 import 'package:itgate/theme/shared_font_style.dart';
-import 'package:itgate/widgets/course_item.dart';
+import 'package:itgate/widgets/attendance_widget.dart';
 
 
 
-
-class OurCourses extends StatefulWidget {
+class CourseAttendance extends StatefulWidget {
 
   @override
-  _OurCoursesState createState() => _OurCoursesState();
+  _CourseAttendanceState createState() => _CourseAttendanceState();
 }
 
-class _OurCoursesState extends State<OurCourses> {
+class _CourseAttendanceState extends State<CourseAttendance> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,
         title: Text(
-            'Our Offers',
+            'Attendance | Cyber Security',
             style: primaryBlackFontStyle,
           ),
+          iconTheme: IconThemeData(color: secondaryColor, size: 20.0),
         backgroundColor: Colors.white,
       ),
       body: Container(
         margin: EdgeInsets.all(10.0),
         child: ListView.builder(
           scrollDirection: Axis.vertical,
-          itemCount: 3,
+          itemCount: 5,
           itemBuilder: (context, index) {
-            return CourseItem(
-              'Cyber Security',
-              'https://www.passwordrevelator.net/blog/wp-content/uploads/2021/02/conseils-cyber-securite.jpg',
-              '!enrolled'
-            );
-          }
+            return AttendanceWidget();
+          },
         ),
       ),
     );

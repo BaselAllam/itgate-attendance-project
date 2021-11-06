@@ -96,6 +96,8 @@ bool isEnabled = false;
                 () {
                   if(!_formKey.currentState!.validate()) {
                     ScaffoldMessenger.of(context).showSnackBar(snack('Some Fields Required', Colors.red));
+                  }else if(isEnabled == false) {
+                    ScaffoldMessenger.of(context).showSnackBar(snack('Some Fields Required', Colors.red));
                   }else{
                     // Shared.saveOffline('email', emailController.text);
                     Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) {return BottomNavBar();}));
