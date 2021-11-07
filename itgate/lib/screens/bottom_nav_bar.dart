@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:itgate/screens/about_screen.dart';
 import 'package:itgate/screens/home_page.dart';
 import 'package:itgate/screens/our_courses.dart';
 import 'package:itgate/screens/profile.dart';
@@ -18,7 +19,7 @@ class BottomNavBar extends StatefulWidget {
 class _BottomNavBarState extends State<BottomNavBar> {
 
 final List<Widget> screens = [
-  HomePage(), OurCourses(), Profile(),
+  HomePage(), OurCourses(), AboutScreen(), Profile(),
 ];
 
 int current = 0;
@@ -30,14 +31,15 @@ int current = 0;
         items: [
           bottomItem(Icons.home, 'Home'),
           bottomItem(Icons.category, 'Courses'),
+          bottomItem(Icons.info_outline, 'About Us'),
           bottomItem(Icons.person, 'Profile'),
         ],
         backgroundColor: Colors.white,
         elevation: 0.0,
         selectedLabelStyle: primaryFontStyle,
         unselectedLabelStyle: secondaryTextStyle,
-        selectedIconTheme: IconThemeData(color: primaryColor, size: 18.0),
-        unselectedIconTheme: IconThemeData(color: Colors.grey, size: 18.0),
+        selectedIconTheme: IconThemeData(color: primaryColor, size: 25.0),
+        unselectedIconTheme: IconThemeData(color: Colors.grey, size: 25.0),
         selectedItemColor: primaryColor,
         unselectedItemColor: Colors.grey,
         currentIndex: current,

@@ -24,6 +24,12 @@ class _CourseAttendanceState extends State<CourseAttendance> {
           iconTheme: IconThemeData(color: secondaryColor, size: 20.0),
         backgroundColor: Colors.white,
       ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: secondaryColor,
+        child: Icon(Icons.add, color: Colors.white, size: 20.0),
+        onPressed: () {},
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       body: Container(
         margin: EdgeInsets.all(10.0),
         child: ListView.builder(
