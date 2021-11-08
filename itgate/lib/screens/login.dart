@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:itgate/models/main_model.dart';
+import 'package:itgate/models/shared.dart';
 import 'package:itgate/screens/bottom_nav_bar.dart';
 import 'package:itgate/theme/shared_color.dart';
 import 'package:itgate/theme/shared_font_style.dart';
 import 'package:itgate/widgets/custom_button.dart';
 import 'package:itgate/widgets/fields.dart';
+import 'package:itgate/widgets/loading.dart';
 import 'package:itgate/widgets/snack_bar.dart';
 import 'package:scoped_model/scoped_model.dart';
 
@@ -66,22 +68,31 @@ bool isEnabled = false;
                 ),
               ScopedModelDescendant(
                 builder: (context, child, MainModel model) {
-                  return CustomButton(
-                    'Login',
-                    isEnabled,
-                    () async {
-                      if(idController.text.isEmpty) {
-                        ScaffoldMessenger.of(context).showSnackBar(snack('Some Fields Required', Colors.red));
-                      }else if(isEnabled == false) {
-                        ScaffoldMessenger.of(context).showSnackBar(snack('Some Fields Required', Colors.red));
-                      }else{
-                        // Shared.saveOffline('email', emailController.text);
-                        bool _getDataValid = await model.getAboutData();
-                        bool _getCourseValid = await model.getAllCourses();
-                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) {return BottomNavBar();}));
+                  if(model.isUserLogin == true) {
+                    return Center(child: Loading());
+                  }else{
+                    return CustomButton(
+                      'Login',
+                      isEnabled,
+                      () async {
+                        if(idController.text.isEmpty) {
+                          ScaffoldMessenger.of(context).showSnackBar(snack('Some Fields Required', Colors.red));
+                        }else if(isEnabled == false) {
+                          ScaffoldMessenger.of(context).showSnackBar(snack('Some Fields Required', Colors.red));
+                        }else{
+                          bool _isLoginValid = await model.login(idController.text.trim());
+                          if(_isLoginValid == true) {
+                            Shared.saveId('id', idController.text);
+                            bool _getDataValid = await model.getAboutData();
+                            bool _getCourseValid = await model.getAllCourses();
+                            Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) {return BottomNavBar();}));
+                          }else{
+                            ScaffoldMessenger.of(context).showSnackBar(snack('Invalid Login', Colors.red));
+                          }
+                        }
                       }
-                    }
-                  );
+                    );
+                  }
                 }
               ),
             ],
