@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:itgate/models/main_model.dart';
 import 'package:itgate/theme/shared_color.dart';
 import 'package:itgate/theme/shared_font_style.dart';
 import 'package:itgate/widgets/snack_bar.dart';
+import 'package:scoped_model/scoped_model.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 
@@ -14,74 +16,78 @@ class AboutScreen extends StatefulWidget {
 class _AboutScreenState extends State<AboutScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        elevation: 0.0,
-        title: Text(
-            'About Us',
-            style: primaryBlackFontStyle,
-          ),
-        backgroundColor: Colors.white,
-      ),
-      body: Container(
-        margin: EdgeInsets.all(10.0),
-        child: ListView(
-          scrollDirection: Axis.vertical,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: ListTile(
-                leading: Container(
-                  height: 70.0,
-                  width: 70.0,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.white,
-                    image: DecorationImage(
-                      image: AssetImage('assets/logo.png'),
-                    )
-                  ),
+    return ScopedModelDescendant(
+      builder: (context, child, MainModel model) {
+        return Scaffold(
+            appBar: AppBar(
+              elevation: 0.0,
+              title: Text(
+                  'About Us',
+                  style: primaryBlackFontStyle,
                 ),
-                title: Text(
-                  'It Gate Academy',
-                  style: primaryBlackFontStyle
-                ),
-              ),
+              backgroundColor: Colors.white,
             ),
-            Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    mainAxisSize: MainAxisSize.max,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      socialItem(
-                        'assets/web.png',
-                        'https://www.itgateacademy.com/'
+            body: Container(
+              margin: EdgeInsets.all(10.0),
+              child: ListView(
+                scrollDirection: Axis.vertical,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: ListTile(
+                      leading: Container(
+                        height: 70.0,
+                        width: 70.0,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.white,
+                          image: DecorationImage(
+                            image: AssetImage('assets/logo.png'),
+                          )
+                        ),
                       ),
-                      socialItem(
-                        'assets/fb.png',
-                        'https://www.facebook.com/ITGateAcademy/?ref=br_rs'
+                      title: Text(
+                        'It Gate Academy',
+                        style: primaryBlackFontStyle
                       ),
-                      socialItem(
-                        'assets/insta.png',
-                        'https://www.instagram.com/itgate_academy/'
-                      ),
-                      socialItem(
-                        'assets/linkedin.png',
-                        'https://www.linkedin.com/in/it-gate-academy'
-                      ),
-                    ],
+                    ),
                   ),
-                ),
-            item('Address:', '14 Ahmed Hosny St, From Tayran St, Rabea El Adawya, Nasr City, Cairo, Egypt', Icons.location_on),
-            item('Tel:', '0106765737 - 01032841556 - 01115166255 - 02 22605347', Icons.phone),
-            item('About Us', 'About us Data', Icons.info_outline),
-            item('Our Mission', 'Our Mission Data', Icons.track_changes_rounded),
-            item('Our Vision', 'Our Vision Data', Icons.remove_red_eye),
-          ],
-        )
-      ),
+                  Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          mainAxisSize: MainAxisSize.max,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            socialItem(
+                              'assets/web.png',
+                              'https://www.itgateacademy.com/'
+                            ),
+                            socialItem(
+                              'assets/fb.png',
+                              'https://www.facebook.com/ITGateAcademy/?ref=br_rs'
+                            ),
+                            socialItem(
+                              'assets/insta.png',
+                              'https://www.instagram.com/itgate_academy/'
+                            ),
+                            socialItem(
+                              'assets/linkedin.png',
+                              'https://www.linkedin.com/in/it-gate-academy'
+                            ),
+                          ],
+                        ),
+                      ),
+                  item('Address:', '14 Ahmed Hosny St, From Tayran St, Rabea El Adawya, Nasr City, Cairo, Egypt', Icons.location_on),
+                  item('Tel:', '0106765737 - 01032841556 - 01115166255 - 02 22605347', Icons.phone),
+                  item('About Us', '${model.aboutModel!.about}', Icons.info_outline),
+                  item('Our Mission', '${model.aboutModel!.mission}', Icons.track_changes_rounded),
+                  item('Our Vision', '${model.aboutModel!.vision}', Icons.remove_red_eye),
+                ],
+              )
+            ),
+          );
+      },
     );
   }
   Card item(String title, String subtitle, IconData icon) {

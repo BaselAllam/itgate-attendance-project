@@ -29,21 +29,21 @@ class _HomePageState extends State<HomePage> {
           scrollDirection: Axis.vertical,
           children: [
             item('Running Courses', Icons.play_lesson_outlined),
-            CourseItem(
-                'Cyber Security',
-                'https://www.passwordrevelator.net/blog/wp-content/uploads/2021/02/conseils-cyber-securite.jpg',
-                'enrolled'
-              ),
+            // CourseItem(
+            //     'Cyber Security',
+            //     'https://www.passwordrevelator.net/blog/wp-content/uploads/2021/02/conseils-cyber-securite.jpg',
+            //     'enrolled'
+            //   ),
               Padding(
                 padding: const EdgeInsets.only(top: 15.0, bottom: 15.0),
                 child: Divider(color: Colors.grey, thickness: 2.0),
               ),
               item('Ended Courses', Icons.done),
-            CourseItem(
-              'Cyber Security',
-              'https://www.passwordrevelator.net/blog/wp-content/uploads/2021/02/conseils-cyber-securite.jpg',
-              'ended'
-            ),
+            // CourseItem(
+            //   'Cyber Security',
+            //   'https://www.passwordrevelator.net/blog/wp-content/uploads/2021/02/conseils-cyber-securite.jpg',
+            //   'ended'
+            // ),
           ],
         ),
       ),
