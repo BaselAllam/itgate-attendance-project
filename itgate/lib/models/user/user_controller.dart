@@ -18,25 +18,37 @@ mixin UserController on Model{
     _isUserLogin = true;
     notifyListeners();
 
-    Map<String, dynamic> _senderData = {
+    try{
+      Map<String, dynamic> _senderData = {
       'user_ID' : userId
-    };
+      };
 
-    http.Response _res = await http.post(
-      Uri.parse('${Shared.domain}/studentt.php'),
-      body: _senderData
-    );
+      http.Response _res = await http.post(
+        Uri.parse('${Shared.domain}/studentt.php'),
+        body: _senderData
+      );
 
-    var _data = json.decode(_res.body);
-    
-    if(_data == 'Wrong ID') {
+      var _data = json.decode(_res.body);
+
+      if(_data == 'Wrong ID') {
+        _isUserLogin = false;
+        notifyListeners();
+        return false;
+      }else{
+        Shared.saveId('id', userId);
+        _isUserLogin = false;
+        notifyListeners();
+        return true;
+      }
+    }catch(e){
       _isUserLogin = false;
       notifyListeners();
       return false;
-    }else{
-      _isUserLogin = false;
-      notifyListeners();
-      return true;
     }
   }
 }
+
+
+// List<CourseModel> runningCourses;
+// List<CourseModel> endedCourse;
+// List<Attendance> courseAttendance

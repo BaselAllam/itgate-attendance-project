@@ -82,7 +82,6 @@ bool isEnabled = false;
                         }else{
                           bool _isLoginValid = await model.login(idController.text.trim());
                           if(_isLoginValid == true) {
-                            Shared.saveId('id', idController.text);
                             bool _getDataValid = await model.getAboutData();
                             bool _getCourseValid = await model.getAllCourses();
                             Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) {return BottomNavBar();}));
