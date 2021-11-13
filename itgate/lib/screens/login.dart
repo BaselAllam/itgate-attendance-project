@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:itgate/models/main_model.dart';
-import 'package:itgate/models/shared.dart';
 import 'package:itgate/screens/bottom_nav_bar.dart';
 import 'package:itgate/theme/shared_color.dart';
 import 'package:itgate/theme/shared_font_style.dart';

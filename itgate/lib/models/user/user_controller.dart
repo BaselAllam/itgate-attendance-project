@@ -29,13 +29,19 @@ mixin UserController on Model{
       );
 
       var _data = json.decode(_res.body);
-
       if(_data == 'Wrong ID') {
         _isUserLogin = false;
         notifyListeners();
         return false;
       }else{
-        Shared.saveId('id', userId);
+        await Shared.saveId('id', userId);
+        userModel = UserModel(
+          id: _data[0]['st_id'],
+          userName: _data[0]['name'],
+          email: _data[0]['email'],
+          nationalNumber: _data[0]['national_id'],
+          mobileNumber: _data[0]['phone'],
+        );
         _isUserLogin = false;
         notifyListeners();
         return true;
@@ -47,8 +53,3 @@ mixin UserController on Model{
     }
   }
 }
-
-
-// List<CourseModel> runningCourses;
-// List<CourseModel> endedCourse;
-// List<Attendance> courseAttendance

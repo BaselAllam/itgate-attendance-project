@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:itgate/models/main_model.dart';
 import 'package:itgate/theme/shared_color.dart';
 import 'package:itgate/theme/shared_font_style.dart';
+import 'package:scoped_model/scoped_model.dart';
 
 
 
@@ -22,30 +24,33 @@ class _ProfileState extends State<Profile> {
           ),
         backgroundColor: Colors.white,
       ),
-      body: Container(
-        margin: EdgeInsets.all(10.0),
-        child: ListView(
-          scrollDirection: Axis.vertical,
-          children: [
-            profileData()
-          ],
-        ),
+      body: ScopedModelDescendant(
+        builder: (context, child, MainModel model) {
+          return Container(
+            margin: EdgeInsets.all(10.0),
+            child: ListView(
+              scrollDirection: Axis.vertical,
+              children: [
+                profileData(model)
+              ],
+            ),
+          );
+        }
       ),
     );
   }
-  profileData() {
+  profileData(MainModel model) {
     return Card(
       elevation: 3.0,
       color: Colors.white,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
       child: Column(
         children: [
-          profileItem(Icons.person, 'Bassel Allam'),
-          profileItem(Icons.info, 'Id: 234432d'),
-          profileItem(Icons.info, 'National Number: 2303024435345'),
-          profileItem(Icons.info, 'Email: baseljahen@gmail.com'),
-          profileItem(Icons.info, 'Mobile Number: 010101010'),
-          profileItem(Icons.content_paste, 'Course Name'),
+          profileItem(Icons.person, '${model.userModel!.userName}'),
+          profileItem(Icons.info, 'Id: ${model.userModel!.id}'),
+          profileItem(Icons.sim_card_sharp, 'National Number: ${model.userModel!.nationalNumber}'),
+          profileItem(Icons.email, 'Email: ${model.userModel!.email}'),
+          profileItem(Icons.phone, 'Mobile Number: ${model.userModel!.mobileNumber}'),
         ],
       ),
     );

@@ -13,7 +13,7 @@ class Shared{
 
     try{
       SharedPreferences _sharedPreferences = await SharedPreferences.getInstance();
-      _sharedPreferences.getString('$key');
+      _id = _sharedPreferences.getString('$key');
 
       return _id!;
     }catch(e) {
