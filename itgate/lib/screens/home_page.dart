@@ -19,8 +19,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return ScopedModelDescendant(
       builder: (context, child, MainModel model) {
-        // if getCourseIsLoading 
-        if(model.isUserLogin == true) {
+        if(model.isUserLogin) {
           return Center(child: Loading());
         }else{
           return Scaffold(
@@ -34,6 +33,7 @@ class _HomePageState extends State<HomePage> {
             ),
             body: Container(
               margin: EdgeInsets.all(10.0),
+              // model.isGetCoursesLoading == true
               child: ListView(
                 scrollDirection: Axis.vertical,
                 children: [

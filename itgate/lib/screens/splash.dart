@@ -22,6 +22,8 @@ class _SplashScreenState extends State<SplashScreen> {
 
  String? gotid = '';
 
+ Widget? routing;
+
 @override
 void initState() {
   checkUser();
@@ -30,7 +32,7 @@ void initState() {
     () => Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (_) {
-        return checkPath(gotid!, widget.model);
+        return routing!;
       })
     )
   );
@@ -66,16 +68,21 @@ void initState() {
    setState(() {
      gotid = id;
    });
+   checkPath(id, widget.model);
   }
 
-  checkPath(String id, MainModel model) {
+  checkPath(String id, MainModel model) async {
     if(id.isEmpty){
-      return Login();
+      setState(() {
+        routing = Login();
+      });
     }else{
-      model.login(id);
-      model.getAllCourses();
-      model.getAboutData();
-      return BottomNavBar();
+      await model.login(id);
+      await model.getAllCourses();
+      await model.getAboutData();
+      setState(() {
+        routing = BottomNavBar();
+      });
     }
   }
 }
