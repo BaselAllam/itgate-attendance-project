@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:itgate/models/main_model.dart';
 import 'package:itgate/theme/shared_color.dart';
 import 'package:itgate/theme/shared_font_style.dart';
-import 'package:itgate/widgets/course_item.dart';
 import 'package:itgate/widgets/loading.dart';
 import 'package:scoped_model/scoped_model.dart';
 
@@ -33,42 +32,31 @@ class _HomePageState extends State<HomePage> {
             ),
             body: Container(
               margin: EdgeInsets.all(10.0),
-              // model.isGetCoursesLoading == true
-              child: ListView(
+              child: ListView.builder(
                 scrollDirection: Axis.vertical,
-                children: [
-                  item('Running Courses', Icons.play_lesson_outlined),
-                  // CourseItem(
-                  //     'Cyber Security',
-                  //     'https://www.passwordrevelator.net/blog/wp-content/uploads/2021/02/conseils-cyber-securite.jpg',
-                  //     'enrolled'
-                  //   ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 15.0, bottom: 15.0),
-                    child: Divider(color: Colors.grey, thickness: 2.0),
-                  ),
-                ],
+                itemCount: model.allStdCourses.length,
+                itemBuilder: (context, index) {
+                  if(model.isGetStdCoursesLoading) {
+                    return Center(child: Loading());
+                  }else if(model.allStdCourses.isEmpty) {
+                    return Center(child: Text('Ops No Course Found', style: TextStyle(color: blackColor, fontSize: 30.0)));
+                  }else{
+                    return ListTile(
+                      leading: CircleAvatar(
+                        backgroundImage: AssetImage('assets/logo.png'),
+                      ),
+                      title: Text(
+                        '${model.allStdCourses[index].courseName}',
+                        style: primaryBlackFontStyle,
+                      ),
+                    );
+                  }
+                },
               ),
             ),
           );
         }
       }
-    );
-  }
-  item(String title, IconData icon) {
-    return ListTile(
-      title: Text(
-        title,
-        style: primaryFontStyle,
-      ),
-      trailing: Container(
-        padding: EdgeInsets.all(5.0),
-        decoration: BoxDecoration(
-          color: secondaryColor,
-          borderRadius: BorderRadius.circular(15.9),
-        ),
-        child: Icon(icon, color: Colors.white, size: 25.0),
-      ),
     );
   }
 }

@@ -83,6 +83,7 @@ bool isEnabled = false;
                           if(_isLoginValid == true) {
                             bool _getDataValid = await model.getAboutData();
                             bool _getCourseValid = await model.getAllCourses();
+                            bool _isGetStdCoursesValid = await model.getStdCourses(idController.text.trim());
                             Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) {return BottomNavBar();}));
                           }else{
                             ScaffoldMessenger.of(context).showSnackBar(snack('Invalid Login', Colors.red));

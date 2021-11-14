@@ -10,9 +10,14 @@ mixin CoursesController on Model{
   bool _isGetCoursesLoading = false;
   bool get isGetCoursesLoading => _isGetCoursesLoading;
 
-
   List<CourseModel> _allCourses = [];
   List<CourseModel> get allCourses => _allCourses;
+
+  bool _isGetStdCoursesLoading = false;
+  bool get isGetStdCoursesLoading => _isGetStdCoursesLoading;
+
+  List<CourseModel> _allStdCourses = [];
+  List<CourseModel> get allStdCourses => _allStdCourses;
 
 
   Future<bool> getAllCourses() async {
@@ -42,6 +47,43 @@ mixin CoursesController on Model{
       return true;
     }catch(e) {
       _isGetCoursesLoading = false;
+      notifyListeners();
+      return false;
+    }
+  }
+
+
+
+  Future<bool> getStdCourses(String userId) async {
+
+    _isGetStdCoursesLoading = true;
+    notifyListeners();
+
+    try{
+
+      Map<String, dynamic> _senderData = {
+      'app_id' : userId.trim()
+      };
+
+      http.Response _res = await http.post(
+        Uri.parse('${Shared.domain}/all_courses.php'),
+        body: _senderData
+      );
+
+      List _data = json.decode(_res.body);
+
+      _data.forEach((i) {
+        CourseModel _newCourse = CourseModel(
+          courseName: i['coursename'],
+        );
+        _allStdCourses.add(_newCourse);
+      });
+
+      _isGetStdCoursesLoading = false;
+      notifyListeners();
+      return true;
+    }catch(e) {
+      _isGetStdCoursesLoading = false;
       notifyListeners();
       return false;
     }

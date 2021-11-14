@@ -27,15 +27,6 @@ class _SplashScreenState extends State<SplashScreen> {
 @override
 void initState() {
   checkUser();
-  Timer(
-    Duration(seconds: 5),
-    () => Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (_) {
-        return routing!;
-      })
-    )
-  );
   super.initState();
 }
 
@@ -62,27 +53,24 @@ void initState() {
     );
   }
 
-  checkUser() async {
+  void checkUser() async {
 
    String id = await Shared.getSavedId('id');
    setState(() {
      gotid = id;
    });
-   checkPath(id, widget.model);
+   if(id.isEmpty) {
+     Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) {return Login();}));
+   }else{
+     await checkPath(id, widget.model);
+     Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) {return BottomNavBar();}));
+   }
   }
 
   checkPath(String id, MainModel model) async {
-    if(id.isEmpty){
-      setState(() {
-        routing = Login();
-      });
-    }else{
-      await model.login(id);
-      await model.getAllCourses();
-      await model.getAboutData();
-      setState(() {
-        routing = BottomNavBar();
-      });
-    }
+    await model.login(id);
+    await model.getAllCourses();
+    await model.getAboutData();
+    await model.getStdCourses(id);
   }
 }
