@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:itgate/models/main_model.dart';
+import 'package:itgate/screens/course_attendance.dart';
 import 'package:itgate/theme/shared_color.dart';
 import 'package:itgate/theme/shared_font_style.dart';
 import 'package:itgate/widgets/loading.dart';
@@ -49,6 +50,10 @@ class _HomePageState extends State<HomePage> {
                         '${model.allStdCourses[index].courseName}',
                         style: primaryBlackFontStyle,
                       ),
+                      onTap: () {
+                        model.checkAttendance(model.userModel!.id, model.allStdCourses[index].id!);
+                        Navigator.push(context, MaterialPageRoute(builder: (_) {return CourseAttendance(model);}));
+                      },
                     );
                   }
                 },

@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:itgate/models/attendance/attendance_model.dart';
 import 'package:itgate/theme/shared_color.dart';
 import 'package:itgate/theme/shared_font_style.dart';
 
 
 
 class AttendanceWidget extends StatefulWidget {
+
+  final AttendanceModel attendanceModel;
+
+  AttendanceWidget(this.attendanceModel);
 
   @override
   _AttendanceWidgetState createState() => _AttendanceWidgetState();
@@ -32,7 +37,7 @@ class _AttendanceWidgetState extends State<AttendanceWidget> {
             ),
             alignment: Alignment.center,
             child: Text(
-              '12 Nov\n2021',
+              '${widget.attendanceModel.date}\n${widget.attendanceModel.day}',
               textAlign: TextAlign.center,
               style: TextStyle(color: blackColor, fontSize: 20.0, fontWeight: FontWeight.bold),
             )
@@ -50,7 +55,7 @@ class _AttendanceWidgetState extends State<AttendanceWidget> {
               subtitle: Padding(
                 padding: const EdgeInsets.only(top: 8.0, right: 8.0),
                 child: Text(
-                  ' 6:00 PM          10:00 PM',
+                  ' ${widget.attendanceModel.goin}          ${widget.attendanceModel.goout}',
                   style: secondaryTextStyle,
                 ),
               ),

@@ -75,6 +75,7 @@ mixin CoursesController on Model{
       _data.forEach((i) {
         CourseModel _newCourse = CourseModel(
           courseName: i['coursename'],
+          id: i['id']
         );
         _allStdCourses.add(_newCourse);
       });

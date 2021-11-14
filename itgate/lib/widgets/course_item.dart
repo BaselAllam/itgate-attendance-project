@@ -26,9 +26,7 @@ class _CourseItemState extends State<CourseItem> {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        if(widget.type == 'enrolled') {
-          Navigator.push(context, MaterialPageRoute(builder: (_) {return CourseAttendance();}));
-        }
+        
       },
       child: Card(
         elevation: 5.0,

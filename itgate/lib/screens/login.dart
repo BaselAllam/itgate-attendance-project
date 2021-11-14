@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:itgate/models/main_model.dart';
+import 'package:itgate/models/shared.dart';
 import 'package:itgate/screens/bottom_nav_bar.dart';
 import 'package:itgate/theme/shared_color.dart';
 import 'package:itgate/theme/shared_font_style.dart';
@@ -23,6 +24,8 @@ TextEditingController idController = TextEditingController();
 GlobalKey<FormState> idKey = GlobalKey<FormState>();
 
 bool isEnabled = false;
+
+String diplomaOrCourse = '';
 
   @override
   Widget build(BuildContext context) {
@@ -65,6 +68,29 @@ bool isEnabled = false;
                 () => 
                 _updateLoginButton(),
                 ),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: PopupMenuButton(
+                    itemBuilder: (BuildContext context) {
+                      return <PopupMenuEntry<String>>[
+                        PopupMenuItem(
+                          child: Text('Course'),
+                          value: 'course',
+                        ),
+                        PopupMenuItem(
+                          child: Text('Diploma'),
+                          value: 'diploma',
+                        ),
+                      ];
+                    },
+                    onSelected: (value) {
+                      setState(() {
+                        diplomaOrCourse = value.toString();
+                      });
+                    },
+                    child: Text(diplomaOrCourse.isEmpty ? 'Select Diploma Or Course' : '$diplomaOrCourse', style: TextStyle(color: blackColor, fontSize: 20.0)),
+                  ),
+                ),
               ScopedModelDescendant(
                 builder: (context, child, MainModel model) {
                   if(model.isUserLogin == true) {
@@ -78,9 +104,12 @@ bool isEnabled = false;
                           ScaffoldMessenger.of(context).showSnackBar(snack('Some Fields Required', Colors.red));
                         }else if(isEnabled == false) {
                           ScaffoldMessenger.of(context).showSnackBar(snack('Some Fields Required', Colors.red));
+                        }else if(diplomaOrCourse.isEmpty) {
+                          ScaffoldMessenger.of(context).showSnackBar(snack('Choose Course or Diploma', Colors.red));
                         }else{
                           bool _isLoginValid = await model.login(idController.text.trim());
                           if(_isLoginValid == true) {
+                            Shared.saveId('courseOrDiploma', diplomaOrCourse);
                             bool _getDataValid = await model.getAboutData();
                             bool _getCourseValid = await model.getAllCourses();
                             bool _isGetStdCoursesValid = await model.getStdCourses(idController.text.trim());

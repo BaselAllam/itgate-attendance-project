@@ -2,6 +2,7 @@
 
 class CourseModel{
 
+  String? id;
   String? courseName;
   String? courseImg;
   String? coursePrice;
@@ -10,6 +11,7 @@ class CourseModel{
   String? online;
 
   CourseModel({
+    this.id,
     this.courseName,
     this.courseImg,
     this.coursePrice,
