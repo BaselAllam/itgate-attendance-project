@@ -4,6 +4,7 @@ import 'package:itgate/theme/shared_color.dart';
 import 'package:itgate/theme/shared_font_style.dart';
 import 'package:itgate/widgets/attendance_widget.dart';
 import 'package:itgate/widgets/loading.dart';
+import 'package:itgate/widgets/snack_bar.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 
@@ -28,26 +29,22 @@ void dispose() {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        elevation: 0.0,
-        title: Text(
-            'Attendance | Cyber Security',
-            style: primaryBlackFontStyle,
+    return ScopedModelDescendant(
+      builder: (context, child, MainModel model) {
+        return Scaffold(
+          appBar: AppBar(
+            elevation: 0.0,
+            title: Text(
+                'Attendance',
+                style: primaryBlackFontStyle,
+              ),
+              iconTheme: IconThemeData(color: secondaryColor, size: 20.0),
+            backgroundColor: Colors.white,
           ),
-          iconTheme: IconThemeData(color: secondaryColor, size: 20.0),
-        backgroundColor: Colors.white,
-      ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: secondaryColor,
-        child: Icon(Icons.add, color: Colors.white, size: 20.0),
-        onPressed: () {},
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      body: ScopedModelDescendant(
-        builder: (context, child, MainModel model) {
-          return Container(
-          margin: EdgeInsets.all(10.0),
+          floatingActionButton: TakeAttendance(),
+          floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+          body: Container(
+            margin: EdgeInsets.all(10.0),
             child: ListView.builder(
               scrollDirection: Axis.vertical,
               itemCount: model.allAttendance.length,
@@ -61,9 +58,37 @@ void dispose() {
                 }
               },
             ),
-          );
-        },
-      ),
+          ),
+        );
+      }
+    );
+  }
+}
+
+
+
+class TakeAttendance extends StatefulWidget {
+
+  @override
+  _TakeAttendanceState createState() => _TakeAttendanceState();
+}
+
+class _TakeAttendanceState extends State<TakeAttendance> {
+  @override
+  Widget build(BuildContext context) {
+    return ScopedModelDescendant(
+      builder: (context, child, MainModel model) {
+        return FloatingActionButton(
+          backgroundColor: secondaryColor,
+          child: model.isBluetoothScaning == true ? Center(child: Loading()) : Icon(Icons.add, color: Colors.white, size: 20.0),
+          onPressed: () async {
+            bool _isOn = await model.blueToothController();
+            if(_isOn == false) {
+              ScaffoldMessenger.of(context).showSnackBar(snack('Bluetooth Disabled Please Enable It', Colors.red));
+            }
+          },
+        );
+      }
     );
   }
 }
