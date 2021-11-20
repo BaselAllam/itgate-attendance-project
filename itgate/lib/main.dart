@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:itgate/models/main_model.dart';
-import 'package:itgate/screens/splash.dart';
+import 'package:itgate/screens/scan_device.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 
@@ -23,7 +23,8 @@ class _MyAppState extends State<MyApp> {
         builder: (context, child, MainModel model) {
           return MaterialApp(
             debugShowCheckedModeBanner: false,
-            home: SplashScreen(model)
+            home: ScanDevices()
+            // home: SplashScreen(model)
           );
         },
       ),

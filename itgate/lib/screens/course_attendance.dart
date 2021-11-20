@@ -82,10 +82,7 @@ class _TakeAttendanceState extends State<TakeAttendance> {
           backgroundColor: secondaryColor,
           child: model.isBluetoothScaning == true ? Center(child: Loading()) : Icon(Icons.add, color: Colors.white, size: 20.0),
           onPressed: () async {
-            bool _isOn = await model.blueToothController();
-            if(_isOn == false) {
-              ScaffoldMessenger.of(context).showSnackBar(snack('Bluetooth Disabled Please Enable It', Colors.red));
-            }
+            
           },
         );
       }

@@ -3,7 +3,6 @@ import 'package:itgate/models/shared.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:flutter_blue/flutter_blue.dart';
 
 
 mixin AttendanceController on Model{
@@ -97,44 +96,6 @@ mixin AttendanceController on Model{
       return false;
     }
   }
-
-
-  FlutterBlue _flutterBlue = FlutterBlue.instance;
-
-  Future<bool> blueToothController() async {
-
-    _isBluetoothScaning = true;
-    notifyListeners();
-
-    bool _isOn = await _flutterBlue.isOn;
-
-    if(_isOn == true) {
-
-      _flutterBlue.startScan(timeout: Duration(seconds: 10));
-
-      var _subscription = await _flutterBlue.scanResults.listen((results) {
-
-        print('im here');
-
-        for(ScanResult scan in results) {
-          print('---------${scan}');
-        }
-      });
-
-      print('im out here');
-
-      _flutterBlue.stopScan();
-
-      _isBluetoothScaning = false;
-      notifyListeners();
-      return true;
-    }else{
-      _isBluetoothScaning = false;
-      notifyListeners();
-      return false;
-    }
-
-  }
 }
 
-// TGA-210020
+// TGA-2100199
