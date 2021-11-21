@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:itgate/models/main_model.dart';
 import 'package:itgate/models/shared.dart';
 import 'package:itgate/screens/scan_device.dart';
+import 'package:itgate/screens/scan_qr.dart';
 import 'package:itgate/theme/shared_color.dart';
 import 'package:itgate/theme/shared_font_style.dart';
 import 'package:itgate/widgets/attendance_widget.dart';
 import 'package:itgate/widgets/loading.dart';
-import 'package:itgate/widgets/snack_bar.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 
@@ -82,7 +82,8 @@ class _TakeAttendanceState extends State<TakeAttendance> {
             String _savedAddress = await Shared.getSavedId('deviceAddress');
             if(_savedAddress.isEmpty) {
               Navigator.push(context, MaterialPageRoute(builder: (_) {return ScanDevices();}));
-            }
+            }else{
+              Navigator.push(context, MaterialPageRoute(builder: (_) {return ScanQr();}));}
           },
         );
       }
