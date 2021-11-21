@@ -30,6 +30,7 @@ String diplomaOrCourse = '';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Container(
         margin: EdgeInsets.all(10.0),
         child: ListView(
@@ -68,9 +69,10 @@ String diplomaOrCourse = '';
                 () => 
                 _updateLoginButton(),
                 ),
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: PopupMenuButton(
+                ListTile(
+                  title: Text(diplomaOrCourse.isEmpty ? 'Select Diploma Or Course' : '$diplomaOrCourse', style: TextStyle(color: blackColor, fontSize: 20.0)),
+                  trailing: PopupMenuButton(
+                    icon: Icon(Icons.arrow_downward, color: secondaryColor, size: 20.0),
                     itemBuilder: (BuildContext context) {
                       return <PopupMenuEntry<String>>[
                         PopupMenuItem(
@@ -87,8 +89,7 @@ String diplomaOrCourse = '';
                       setState(() {
                         diplomaOrCourse = value.toString();
                       });
-                    },
-                    child: Text(diplomaOrCourse.isEmpty ? 'Select Diploma Or Course' : '$diplomaOrCourse', style: TextStyle(color: blackColor, fontSize: 20.0)),
+                    }, 
                   ),
                 ),
               ScopedModelDescendant(

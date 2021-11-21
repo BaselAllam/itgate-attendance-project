@@ -10,6 +10,9 @@ mixin AttendanceController on Model{
   bool _isGetAttendanceLoading = false;
   bool get isGetAttendanceLoading => _isGetAttendanceLoading;
 
+  bool _isValidateMaxcLoading = false;
+  bool get isValidateMaxcLoading => _isValidateMaxcLoading;
+
   List<AttendanceModel> _allAttendance = [];
   List<AttendanceModel> get allAttendance => _allAttendance;
 
@@ -96,6 +99,42 @@ mixin AttendanceController on Model{
       return false;
     }
   }
-}
 
-// TGA-2100199
+
+  Future<bool> validateMac(String mac) async {
+
+    _isValidateMaxcLoading = true;
+    notifyListeners();
+
+    try{
+      
+      Map<String, dynamic> _sendingData = {
+        'mac' : mac,
+      };
+
+      http.Response _res = await http.post(
+        Uri.parse('${Shared.domain}/makscan.php'),
+        body: _sendingData
+      );
+
+      var _data = json.decode(_res.body);
+
+      if(_data['response'] == 'invalid') {
+        _isValidateMaxcLoading = false;
+        notifyListeners();
+        return false;
+      }else{
+        Shared.saveId('deviceAddress', mac);
+        _isValidateMaxcLoading = false;
+        notifyListeners();
+        return true;
+      }
+
+    }catch(e) {
+      _isValidateMaxcLoading = false;
+      notifyListeners();
+      return false;
+    }
+
+  }
+}

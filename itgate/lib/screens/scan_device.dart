@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
+import 'package:itgate/models/main_model.dart';
 import 'package:itgate/theme/shared_color.dart';
 import 'package:itgate/theme/shared_font_style.dart';
+import 'package:itgate/widgets/loading.dart';
 import 'package:itgate/widgets/snack_bar.dart';
+import 'package:scoped_model/scoped_model.dart';
 
 
 class ScanDevices extends StatefulWidget {
@@ -122,10 +125,13 @@ class _ScanDevicesState extends State<ScanDevices> {
   // Now, its time to build the UI
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
+    return ScopedModelDescendant(
+      builder: (context, child, MainModel model) {
+        return Scaffold(
+        backgroundColor: Colors.white,
         key: _scaffoldKey,
         appBar: AppBar(
+          iconTheme: IconThemeData(color: secondaryColor, size: 20.0),
           title: Text("Scan Devices", style: primaryFontStyle),
           elevation: 0.0,
           backgroundColor: Colors.white,
@@ -160,6 +166,32 @@ class _ScanDevicesState extends State<ScanDevices> {
           child: Column(
             mainAxisSize: MainAxisSize.max,
             children: <Widget>[
+              Container(
+                margin: EdgeInsets.all(10.0),
+                padding: EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 5.0),
+                decoration: BoxDecoration(
+                  color: secondaryColor,
+                  borderRadius: BorderRadius.circular(20.0)
+                ),
+                child: ListTile(
+                  title: Text(
+                    "NOTE: To take attendance you have first to Pair with the PC throw you mobile setting then choose this PC from Baired Device Below",
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                  trailing: IconButton(
+                    icon: Icon(Icons.settings),
+                    color: primaryColor,
+                    iconSize: 30.0,
+                    onPressed: () {
+                      FlutterBluetoothSerial.instance.openSettings();
+                    },
+                  )
+                ),
+              ),
               Visibility(
                 visible: _isButtonUnavailable &&
                     _bluetoothState == BluetoothState.STATE_ON,
@@ -169,114 +201,83 @@ class _ScanDevicesState extends State<ScanDevices> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.all(10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
+                padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
+                child: ListTile(
+                  title: Text(
+                    'Enable Bluetooth',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 16,
+                    ),
+                  ),
+                  trailing: Switch(
+                    value: _bluetoothState.isEnabled,
+                    activeColor: primaryColor,
+                    activeTrackColor: secondaryColor,
+                    onChanged: (bool value) {
+                      future() async {
+                        if (value) {
+                          await FlutterBluetoothSerial.instance
+                              .requestEnable();
+                        } else {
+                          await FlutterBluetoothSerial.instance
+                              .requestDisable();
+                        }
+  
+                        await getPairedDevices();
+                        _isButtonUnavailable = false;
+  
+                        if (_connected) {
+                          _disconnect();
+                        }
+                      }
+  
+                      future().then((_) {
+                        setState(() {});
+                      });
+                    },
+                  )
+                ),
+              ),
+              ListTile(
+                contentPadding: EdgeInsets.all(10.0),
+                title: Text(
+                  "PAIRED DEVICES",
+                  style: primaryFontStyle,
+                ),
+                subtitle: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Expanded(
-                      child: Text(
-                        'Enable Bluetooth',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 16,
-                        ),
+                    Text(
+                      'Device:',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
-                    Switch(
-                      value: _bluetoothState.isEnabled,
-                      activeColor: primaryColor,
-                      activeTrackColor: secondaryColor,
-                      onChanged: (bool value) {
-                        future() async {
-                          if (value) {
-                            await FlutterBluetoothSerial.instance
-                                .requestEnable();
-                          } else {
-                            await FlutterBluetoothSerial.instance
-                                .requestDisable();
-                          }
-
-                          await getPairedDevices();
-                          _isButtonUnavailable = false;
-
-                          if (_connected) {
-                            _disconnect();
-                          }
-                        }
-
-                        future().then((_) {
-                          setState(() {});
-                        });
+                    DropdownButton(
+                      items: _getDeviceItems(),
+                      onChanged: (BluetoothDevice? value) async {
+                        setState(() => _device = value);
+                        bool _valid = await model.validateMac(_device!.address);
+                        if(_valid) {
+                          ScaffoldMessenger.of(context).showSnackBar(snack('Validated Sucess lets Scan QR Code', Colors.green));
+                          Future.delayed(Duration(seconds: 4));
+                          Navigator.pop(context);
+                        }else{
+                          ScaffoldMessenger.of(context).showSnackBar(snack('Invalid Device Please Pair to the Correct device to take attendance', Colors.red));}
                       },
-                    )
+                      value: _devicesList.isNotEmpty ? _device : null,
+                    ),
+                    model.isValidateMaxcLoading ? Center(child: Loading()) :
+                    Icon(Icons.phone_android, color: secondaryColor, size: 30.0),
                   ],
                 ),
               ),
-              Stack(
-                children: <Widget>[
-                  Column(
-                    children: <Widget>[
-                      ListTile(
-                        title: Text(
-                          "PAIRED DEVICES",
-                          style: primaryFontStyle,
-                        ),
-                        subtitle: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Text(
-                              'Device:',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            DropdownButton(
-                              items: _getDeviceItems(),
-                              onChanged: (BluetoothDevice? value) =>
-                                  setState(() => _device = value),
-                              value: _devicesList.isNotEmpty ? _device : null,
-                            ),
-                            RaisedButton(
-                              color: _connected ? Colors.red : secondaryColor,
-                              onPressed: _isButtonUnavailable
-                                  ? null
-                                  : _connected ? _disconnect : _connect,
-                              child:
-                                  Text(_connected ? 'Disconnect' : 'Connect', style: TextStyle(color: Colors.white)),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: ListTile(
-                    title: Text(
-                      "NOTE: If you cannot find the device in the list, please pair the device by going to the bluetooth settings",
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.grey,
-                      ),
-                    ),
-                    trailing: RaisedButton(
-                      elevation: 2,
-                      child: Text("Bluetooth\nSettings"),
-                      onPressed: () {
-                        FlutterBluetoothSerial.instance.openSettings();
-                      },
-                    ),
-                  ),
-                ),
-              )
             ],
           ),
         ),
+      );
+      }
     );
   }
 

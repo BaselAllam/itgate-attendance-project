@@ -61,15 +61,26 @@ void initState() {
    if(id.isEmpty) {
      Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) {return Login();}));
    }else{
-     await checkPath(id, widget.model);
-     Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) {return BottomNavBar();}));
+     bool _valid = await checkPath(id, widget.model);
+     if(_valid == true) {
+       Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) {return BottomNavBar();}));
+     }
    }
   }
 
-  checkPath(String id, MainModel model) async {
-    await model.login(id);
-    await model.getAllCourses();
-    await model.getAboutData();
-    await model.getStdCourses(id);
+  Future<bool> checkPath(String id, MainModel model) async {
+    try{
+      bool _valid = await model.login(id);
+      await model.getAllCourses();
+      await model.getAboutData();
+      await model.getStdCourses(id);
+      if(_valid == true) {
+        return true;
+      }else{
+        return false;
+      }
+    }catch(e) {
+      return false;
+    }
   }
 }

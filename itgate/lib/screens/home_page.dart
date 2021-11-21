@@ -5,6 +5,7 @@ import 'package:itgate/theme/shared_color.dart';
 import 'package:itgate/theme/shared_font_style.dart';
 import 'package:itgate/widgets/loading.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 
@@ -23,6 +24,7 @@ class _HomePageState extends State<HomePage> {
           return Center(child: Loading());
         }else{
           return Scaffold(
+            backgroundColor: Colors.white,
             appBar: AppBar(
               elevation: 0.0,
               title: Text(
@@ -30,6 +32,17 @@ class _HomePageState extends State<HomePage> {
                   style: primaryBlackFontStyle,
                 ),
               backgroundColor: Colors.white,
+              actions: [
+                IconButton(
+                  icon: Icon(Icons.settings),
+                  color: primaryColor,
+                  iconSize: 30.0,
+                  onPressed: () async {
+                    SharedPreferences _shared = await SharedPreferences.getInstance();
+                    _shared.clear();
+                  },
+                )
+              ]
             ),
             body: Container(
               margin: EdgeInsets.all(10.0),

@@ -72,10 +72,12 @@ mixin CoursesController on Model{
 
       List _data = json.decode(_res.body);
 
+      String _savedValue = await Shared.getSavedId('courseOrDiploma');
+
       _data.forEach((i) {
         CourseModel _newCourse = CourseModel(
-          courseName: i['coursename'],
-          id: i['id']
+          courseName: _savedValue == 'course' ? i['Name'] : i['coursename'],
+          id: _savedValue == 'course' ? i['course_id'] : i['id']
         );
         _allStdCourses.add(_newCourse);
       });

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:itgate/models/main_model.dart';
+import 'package:itgate/models/shared.dart';
+import 'package:itgate/screens/scan_device.dart';
 import 'package:itgate/theme/shared_color.dart';
 import 'package:itgate/theme/shared_font_style.dart';
 import 'package:itgate/widgets/attendance_widget.dart';
@@ -32,6 +34,7 @@ void dispose() {
     return ScopedModelDescendant(
       builder: (context, child, MainModel model) {
         return Scaffold(
+          backgroundColor: Colors.white,
           appBar: AppBar(
             elevation: 0.0,
             title: Text(
@@ -45,17 +48,11 @@ void dispose() {
           floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
           body: Container(
             margin: EdgeInsets.all(10.0),
-            child: ListView.builder(
+            child: model.isGetAttendanceLoading ? Center(child: Loading()) : model.allAttendance.isEmpty ? Center(child: Text('Opps no Attendance Found')) : ListView.builder(
               scrollDirection: Axis.vertical,
               itemCount: model.allAttendance.length,
               itemBuilder: (context, index) {
-                if(model.isGetAttendanceLoading) {
-                  return Center(child: Loading());
-                }else if(model.allAttendance.isEmpty) {
-                  return Center(child: Text('Opps no Attendance Found'));
-                }else{
-                  return AttendanceWidget(model.allAttendance[index]);
-                }
+                return AttendanceWidget(model.allAttendance[index]);
               },
             ),
           ),
@@ -82,7 +79,10 @@ class _TakeAttendanceState extends State<TakeAttendance> {
           backgroundColor: secondaryColor,
           child: model.isBluetoothScaning == true ? Center(child: Loading()) : Icon(Icons.add, color: Colors.white, size: 20.0),
           onPressed: () async {
-            
+            String _savedAddress = await Shared.getSavedId('deviceAddress');
+            if(_savedAddress.isEmpty) {
+              Navigator.push(context, MaterialPageRoute(builder: (_) {return ScanDevices();}));
+            }
           },
         );
       }
