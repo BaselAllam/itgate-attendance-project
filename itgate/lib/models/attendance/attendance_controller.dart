@@ -17,6 +17,9 @@ mixin AttendanceController on Model{
   bool _isGetCurrentPositionLoading = false;
   bool get isGetCurrentPositionLoading => _isGetCurrentPositionLoading;
 
+  bool _isTakeAttendanceLoading = false;
+  bool get isTakeAttendanceLoading => _isTakeAttendanceLoading;
+
   List<AttendanceModel> _allAttendance = [];
   List<AttendanceModel> get allAttendance => _allAttendance;
 
@@ -185,6 +188,46 @@ mixin AttendanceController on Model{
       _isGetAttendanceLoading = false;
       notifyListeners();
       return 3;
+    }
+  }
+
+  Future<bool> takeAttendance(String go) async {
+
+    _isTakeAttendanceLoading = true;
+    notifyListeners();
+
+    try{
+
+      String _userId = await Shared.getSavedId('id');
+
+      Map<String, dynamic> _sendingData = {
+        'date' : DateTime.now().toString().substring(0, 10),
+        'time' : DateTime.now().toString().substring(10, 19),
+        'st_id' : _userId,
+        'go' : go
+      };
+
+      http.Response _res = await http.post(
+        Uri.parse('${Shared.domain}/courses_attend.php'),
+        body: _sendingData
+      );
+
+      var _data = json.decode(_res.body);
+
+      if(_data['response'] == 'invalid') {
+        _isValidateLocationLoading = false;
+        notifyListeners();
+        return false;
+      }else{
+        _isValidateLocationLoading = false;
+        notifyListeners();
+        return true;
+      }
+
+    }catch(e) {
+      _isTakeAttendanceLoading = false;
+      notifyListeners();
+      return false;
     }
   }
 }

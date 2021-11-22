@@ -21,6 +21,8 @@ class _TakeAttendanceState extends State<TakeAttendance> {
 
 bool _isSecondEnabled = false;
 
+InOrOut inOutOption = InOrOut.checkIn;
+
   @override
   Widget build(BuildContext context) {
     return ScopedModelDescendant(
@@ -41,6 +43,44 @@ bool _isSecondEnabled = false;
             child: ListView(
               scrollDirection: Axis.vertical,
               children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Check In', style: primaryBlackFontStyle),
+                        Radio<InOrOut>(
+                          groupValue: inOutOption,
+                          value: InOrOut.checkIn,
+                          onChanged: (InOrOut? value) {
+                            setState(() {
+                              inOutOption = value!;
+                            });
+                          },
+                          activeColor: secondaryColor,
+                        ),
+                      ],
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Check Out', style: primaryBlackFontStyle),
+                        Radio<InOrOut>(
+                          groupValue: inOutOption,
+                          value: InOrOut.checkOut,
+                          onChanged: (InOrOut? value) {
+                            setState(() {
+                              inOutOption = value!;
+                            });
+                          },
+                          activeColor: secondaryColor,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                SizedBox(height: 30.0),
                 ListTile(
                   title: Text(
                     'First Step',
@@ -111,6 +151,29 @@ bool _isSecondEnabled = false;
                     }
                   },
                 ),
+                SizedBox(height: 30.0),
+                TextButton(
+                  child: Text(
+                    'Finish Attendance',
+                    style: TextStyle(color: Colors.white, fontSize: 20.0),
+                  ),
+                  style: TextButton.styleFrom(
+                    backgroundColor: secondaryColor,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0))
+                  ),
+                  onPressed: () async {
+                    if(model.isTakeAttendanceLoading == false) {
+                      bool _valid = await model.takeAttendance(inOutOption == InOrOut.checkIn ? 'on' : 'off');
+                      if(_isSecondEnabled == false) {
+                        ScaffoldMessenger.of(context).showSnackBar(snack('Verify Location First', Colors.red));
+                      }else if(_valid) {
+                        ScaffoldMessenger.of(context).showSnackBar(snack('Attendance Added Succefully', Colors.green));
+                      }else{
+                        ScaffoldMessenger.of(context).showSnackBar(snack('Some Thing Went Wrong Try Again', Colors.red));
+                      }
+                    }
+                  },
+                ),
               ],
             ),
           ),
@@ -118,4 +181,9 @@ bool _isSecondEnabled = false;
       },
     );
   }
+}
+
+
+enum InOrOut{
+  checkIn, checkOut
 }

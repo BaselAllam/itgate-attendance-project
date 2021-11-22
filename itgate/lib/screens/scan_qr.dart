@@ -1,8 +1,8 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:itgate/theme/shared_color.dart';
 import 'package:itgate/theme/shared_font_style.dart';
+import 'package:itgate/widgets/snack_bar.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 
@@ -62,9 +62,33 @@ class _ScanQrState extends State<ScanQr> {
       ),
       body: Container(
         margin: EdgeInsets.all(10.0),
-        child: QRView(
-          key: qrKey,
-          onQRViewCreated: _onQRViewCreated,
+        child: ListView(
+          children: [
+            Container(
+              height: MediaQuery.of(context).size.height/1.4,
+              child: QRView(
+                key: qrKey,
+                onQRViewCreated: _onQRViewCreated,
+              ),
+            ),
+            SizedBox(height: 30.0),
+            TextButton(
+              child: Text(
+                'Scan',
+                style: TextStyle(color: Colors.white, fontSize: 20.0),
+              ),
+              style: TextButton.styleFrom(
+                backgroundColor: secondaryColor,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0))
+              ),
+              onPressed: () {
+                if(result!.code!.isNotEmpty) {
+                  Navigator.pop(context);
+                   ScaffoldMessenger.of(context).showSnackBar(snack('Code Scaned Succefully', Colors.green));
+                }
+              },
+            ),
+          ]
         ),
       ),
     );
