@@ -19,6 +19,7 @@ class _AboutScreenState extends State<AboutScreen> {
     return ScopedModelDescendant(
       builder: (context, child, MainModel model) {
         return Scaffold(
+          backgroundColor: Colors.white,
             appBar: AppBar(
               elevation: 0.0,
               title: Text(

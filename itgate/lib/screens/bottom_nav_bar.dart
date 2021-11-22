@@ -27,6 +27,7 @@ int current = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       bottomNavigationBar: BottomNavigationBar(
         items: [
           bottomItem(Icons.home, 'Home'),

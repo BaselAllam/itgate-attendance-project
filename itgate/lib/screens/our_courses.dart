@@ -18,6 +18,7 @@ class _OurCoursesState extends State<OurCourses> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         elevation: 0.0,
         title: Text(

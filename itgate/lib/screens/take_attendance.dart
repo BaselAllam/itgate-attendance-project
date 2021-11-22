@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:itgate/models/main_model.dart';
+import 'package:itgate/screens/scan_qr.dart';
 import 'package:itgate/theme/shared_color.dart';
 import 'package:itgate/theme/shared_font_style.dart';
 import 'package:itgate/widgets/loading.dart';
@@ -41,6 +42,17 @@ bool _isSecondEnabled = false;
               scrollDirection: Axis.vertical,
               children: [
                 ListTile(
+                  leading: Container(
+                    height: 30.0,
+                    width: 30.0,
+                    decoration: BoxDecoration(
+                      color: primaryColor,
+                      shape: BoxShape.circle
+                    ),
+                    alignment: Alignment.center,
+                    child: Text('1', style: TextStyle(color: Colors.white, fontSize: 20.0)
+                    ),
+                  ),
                   title: Text(
                     'First Step',
                     style: subTextStyle
@@ -72,6 +84,17 @@ bool _isSecondEnabled = false;
                 ),
                 SizedBox(height: 30.0),
                 ListTile(
+                  leading: Container(
+                    height: 30.0,
+                    width: 30.0,
+                    decoration: BoxDecoration(
+                      color: _isSecondEnabled ? primaryColor : Colors.grey,
+                      shape: BoxShape.circle
+                    ),
+                    alignment: Alignment.center,
+                    child: Text('2', style: TextStyle(color: Colors.white, fontSize: 20.0)
+                    ),
+                  ),
                   title: Text(
                     'Second Step',
                     style: subTextStyle
@@ -84,6 +107,8 @@ bool _isSecondEnabled = false;
                   onTap: () {
                     if(_isSecondEnabled == false) {
                       ScaffoldMessenger.of(context).showSnackBar(snack('Verify Location First', Colors.red));
+                    }else{
+                      Navigator.push(context, MaterialPageRoute(builder: (_) {return ScanQr();}));
                     }
                   },
                 ),
