@@ -42,17 +42,6 @@ bool _isSecondEnabled = false;
               scrollDirection: Axis.vertical,
               children: [
                 ListTile(
-                  leading: Container(
-                    height: 30.0,
-                    width: 30.0,
-                    decoration: BoxDecoration(
-                      color: primaryColor,
-                      shape: BoxShape.circle
-                    ),
-                    alignment: Alignment.center,
-                    child: Text('1', style: TextStyle(color: Colors.white, fontSize: 20.0)
-                    ),
-                  ),
                   title: Text(
                     'First Step',
                     style: subTextStyle
@@ -61,7 +50,17 @@ bool _isSecondEnabled = false;
                     'Press to Verify Your Location',
                     style: primaryBlackFontStyle
                   ),
-                  trailing: model.isGetCurrentPositionLoading ? Loading() : Icon(Icons.location_on, color: secondaryColor, size: 25.0),
+                  trailing: Container(
+                    height: 45.0,
+                    width: 45.0,
+                    padding: EdgeInsets.all(5.0),
+                    decoration: BoxDecoration(
+                      color: secondaryColor,
+                      shape: BoxShape.circle
+                    ),
+                    alignment: Alignment.center,
+                    child: model.isGetCurrentPositionLoading ? Loading() :  Icon(Icons.location_on, color: Colors.white, size: 25.0),
+                  ),
                   onTap: () async {
                     if(model.isGetCurrentPositionLoading == false) {
                       int _validator = await model.getCurrentPosition();
@@ -84,17 +83,6 @@ bool _isSecondEnabled = false;
                 ),
                 SizedBox(height: 30.0),
                 ListTile(
-                  leading: Container(
-                    height: 30.0,
-                    width: 30.0,
-                    decoration: BoxDecoration(
-                      color: _isSecondEnabled ? primaryColor : Colors.grey,
-                      shape: BoxShape.circle
-                    ),
-                    alignment: Alignment.center,
-                    child: Text('2', style: TextStyle(color: Colors.white, fontSize: 20.0)
-                    ),
-                  ),
                   title: Text(
                     'Second Step',
                     style: subTextStyle
@@ -103,7 +91,18 @@ bool _isSecondEnabled = false;
                     'Press to Scan Qr Code',
                     style: _isSecondEnabled == false ? subTextStyle : primaryBlackFontStyle
                   ),
-                  trailing: Icon(Icons.qr_code_2, color: _isSecondEnabled == false ? Colors.grey : secondaryColor, size: 30.0),
+                  trailing: Container(
+                    height: 45.0,
+                    width: 45.0,
+                    padding: EdgeInsets.all(5.0),
+                    decoration: BoxDecoration(
+                      color: _isSecondEnabled ? secondaryColor : Colors.grey,
+                      shape: BoxShape.circle
+                    ),
+                    alignment: Alignment.center,
+                    child: Icon(Icons.qr_code_2, color: Colors.white, size: 30.0
+                    ),
+                  ),
                   onTap: () {
                     if(_isSecondEnabled == false) {
                       ScaffoldMessenger.of(context).showSnackBar(snack('Verify Location First', Colors.red));
