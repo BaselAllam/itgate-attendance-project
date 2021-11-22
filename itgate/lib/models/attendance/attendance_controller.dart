@@ -1,3 +1,4 @@
+import 'package:geolocator/geolocator.dart';
 import 'package:itgate/models/attendance/attendance_model.dart';
 import 'package:itgate/models/shared.dart';
 import 'package:scoped_model/scoped_model.dart';
@@ -10,8 +11,11 @@ mixin AttendanceController on Model{
   bool _isGetAttendanceLoading = false;
   bool get isGetAttendanceLoading => _isGetAttendanceLoading;
 
-  bool _isValidateMaxcLoading = false;
-  bool get isValidateMaxcLoading => _isValidateMaxcLoading;
+  bool _isValidateLocationLoading = false;
+  bool get isValidateLocationLoading => _isValidateLocationLoading;
+
+  bool _isGetCurrentPositionLoading = false;
+  bool get isGetCurrentPositionLoading => _isGetCurrentPositionLoading;
 
   List<AttendanceModel> _allAttendance = [];
   List<AttendanceModel> get allAttendance => _allAttendance;
@@ -101,40 +105,86 @@ mixin AttendanceController on Model{
   }
 
 
-  Future<bool> validateMac(String mac) async {
+  Future<bool> _validateLocation(double lat, double long) async {
 
-    _isValidateMaxcLoading = true;
+    _isValidateLocationLoading = true;
     notifyListeners();
 
     try{
       
       Map<String, dynamic> _sendingData = {
-        'mac' : mac,
+        'long' : '$long',
+        'lat' : '$lat'
       };
 
       http.Response _res = await http.post(
-        Uri.parse('${Shared.domain}/makscan.php'),
+        Uri.parse('${Shared.domain}/location.php'),
         body: _sendingData
       );
 
       var _data = json.decode(_res.body);
 
       if(_data['response'] == 'invalid') {
-        _isValidateMaxcLoading = false;
+        _isValidateLocationLoading = false;
         notifyListeners();
         return false;
       }else{
-        Shared.saveId('deviceAddress', mac);
-        _isValidateMaxcLoading = false;
+        _isValidateLocationLoading = false;
         notifyListeners();
         return true;
       }
 
     }catch(e) {
-      _isValidateMaxcLoading = false;
+      _isValidateLocationLoading = false;
       notifyListeners();
       return false;
     }
 
+  }
+
+
+  Future<int> getCurrentPosition() async {
+
+    // 0 => all done
+    // 1 => no permission
+    // 2 => service disabled
+    // 3 => catch
+    // 4 => location incorrect
+
+    _isGetCurrentPositionLoading = true;
+    notifyListeners();
+
+    try{
+      LocationPermission _permission = await Geolocator.checkPermission();
+      bool _serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      Position _currentPosition = await Geolocator.getCurrentPosition();
+
+      if(_permission == LocationPermission.denied) {
+        Geolocator.requestPermission();
+        _isGetCurrentPositionLoading = false;
+        notifyListeners();
+        return 1;
+      }else if(_serviceEnabled == false) {
+        _isGetCurrentPositionLoading = false;
+        notifyListeners();
+        return 2;
+      }else{
+        bool _verifyLocation = await _validateLocation(30.0444, 31.2357);
+        if(_verifyLocation) {
+          _isGetCurrentPositionLoading = false;
+          notifyListeners();
+          return 0;
+        }else{
+          _isGetCurrentPositionLoading = false;
+          notifyListeners();
+          return 4;
+        }
+      }
+
+    }catch(e) {
+      _isGetAttendanceLoading = false;
+      notifyListeners();
+      return 3;
+    }
   }
 }
