@@ -172,7 +172,7 @@ mixin AttendanceController on Model{
         notifyListeners();
         return 2;
       }else{
-        bool _verifyLocation = await _validateLocation(30.0444, 31.2357);
+        bool _verifyLocation = await _validateLocation(_currentPosition.latitude, _currentPosition.longitude);
         if(_verifyLocation) {
           _isGetCurrentPositionLoading = false;
           notifyListeners();
