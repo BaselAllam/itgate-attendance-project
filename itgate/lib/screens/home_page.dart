@@ -64,6 +64,7 @@ class _HomePageState extends State<HomePage> {
                         style: primaryBlackFontStyle,
                       ),
                       onTap: () {
+                        model.getStdSelectedCourse(model.allStdCourses[index]);
                         model.checkAttendance(model.userModel!.id, model.allStdCourses[index].id!);
                         Navigator.push(context, MaterialPageRoute(builder: (_) {return CourseAttendance(model);}));
                       },

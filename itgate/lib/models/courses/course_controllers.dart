@@ -52,6 +52,11 @@ mixin CoursesController on Model{
     }
   }
 
+  CourseModel? selectedCourse;
+
+  getStdSelectedCourse(CourseModel course) {
+    selectedCourse = course;
+  }
 
 
   Future<bool> getStdCourses(String userId) async {

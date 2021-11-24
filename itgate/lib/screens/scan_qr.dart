@@ -82,9 +82,16 @@ class _ScanQrState extends State<ScanQr> {
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0))
               ),
               onPressed: () {
-                if(result!.code!.isNotEmpty) {
-                  Navigator.pop(context);
-                   ScaffoldMessenger.of(context).showSnackBar(snack('Code Scaned Succefully', Colors.green));
+                try{
+                  if(result == null) {
+                    Navigator.pop(context);
+                    ScaffoldMessenger.of(context).showSnackBar(snack('Code Scaned Succefully', Colors.green));
+                  }else{
+                    ScaffoldMessenger.of(context).showSnackBar(snack('Try Again', Colors.red));
+                  }
+                }catch(e) {
+                  print(e);
+                  ScaffoldMessenger.of(context).showSnackBar(snack('Some Thing Went Wrong Try Again', Colors.red));
                 }
               },
             ),

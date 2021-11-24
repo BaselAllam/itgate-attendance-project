@@ -191,7 +191,7 @@ mixin AttendanceController on Model{
     }
   }
 
-  Future<bool> takeAttendance(String go) async {
+  Future<bool> takeAttendance(String go, int courseId) async {
 
     _isTakeAttendanceLoading = true;
     notifyListeners();
@@ -204,8 +204,11 @@ mixin AttendanceController on Model{
         'date' : DateTime.now().toString().substring(0, 10),
         'time' : DateTime.now().toString().substring(10, 19),
         'st_id' : _userId,
-        'go' : go
+        'go' : go,
+        'course_id' : courseId.toString()
       };
+
+      print(_sendingData);
 
       http.Response _res = await http.post(
         Uri.parse('${Shared.domain}/courses_attend.php'),
@@ -214,17 +217,20 @@ mixin AttendanceController on Model{
 
       var _data = json.decode(_res.body);
 
-      if(_data['response'] == 'invalid') {
-        _isValidateLocationLoading = false;
+      print(_data);
+
+      if(_data['response'] == 'Invalid') {
+        _isTakeAttendanceLoading = false;
         notifyListeners();
         return false;
       }else{
-        _isValidateLocationLoading = false;
+        _isTakeAttendanceLoading = false;
         notifyListeners();
         return true;
       }
 
     }catch(e) {
+      print(e);
       _isTakeAttendanceLoading = false;
       notifyListeners();
       return false;

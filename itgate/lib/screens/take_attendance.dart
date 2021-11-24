@@ -153,7 +153,7 @@ InOrOut inOutOption = InOrOut.checkIn;
                 ),
                 SizedBox(height: 30.0),
                 TextButton(
-                  child: Text(
+                  child: model.isTakeAttendanceLoading == true ? Center(child: Loading()) : Text(
                     'Finish Attendance',
                     style: TextStyle(color: Colors.white, fontSize: 20.0),
                   ),
@@ -163,7 +163,7 @@ InOrOut inOutOption = InOrOut.checkIn;
                   ),
                   onPressed: () async {
                     if(model.isTakeAttendanceLoading == false) {
-                      bool _valid = await model.takeAttendance(inOutOption == InOrOut.checkIn ? 'on' : 'off');
+                      bool _valid = await model.takeAttendance(inOutOption == InOrOut.checkIn ? 'ON' : 'OFF', int.parse(model.selectedCourse!.id!));
                       if(_isSecondEnabled == false) {
                         ScaffoldMessenger.of(context).showSnackBar(snack('Verify Location First', Colors.red));
                       }else if(_valid) {
