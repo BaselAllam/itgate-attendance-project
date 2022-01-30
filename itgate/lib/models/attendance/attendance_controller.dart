@@ -108,26 +108,28 @@ mixin AttendanceController on Model{
   }
 
 
-  Future<bool> _validateLocation(double lat, double long) async {
+  Future<bool> _validateLocation(double userLat, double userLong) async {
 
     _isValidateLocationLoading = true;
     notifyListeners();
 
     try{
-      
-      Map<String, dynamic> _sendingData = {
-        'long' : '$long',
-        'lat' : '$lat'
-      };
+      // TGA-2100502
 
       http.Response _res = await http.post(
         Uri.parse('${Shared.domain}/location.php'),
-        body: _sendingData
       );
 
       var _data = json.decode(_res.body);
 
-      if(_data['response'] == 'invalid') {
+      Map<String, dynamic> _serverData = {
+        'long' : double.parse(_data[0]['lon']),
+        'lat' : double.parse(_data[0]['lat']),
+      };
+
+      double _diff = Geolocator.distanceBetween(_serverData['lat'], _serverData['long'], userLat, userLong);
+
+      if(_diff > 30) {
         _isValidateLocationLoading = false;
         notifyListeners();
         return false;
@@ -208,16 +210,12 @@ mixin AttendanceController on Model{
         'course_id' : courseId.toString()
       };
 
-      print(_sendingData);
-
       http.Response _res = await http.post(
         Uri.parse('${Shared.domain}/courses_attend.php'),
         body: _sendingData
       );
 
       var _data = json.decode(_res.body);
-
-      print(_data);
 
       if(_data['response'] == 'Invalid') {
         _isTakeAttendanceLoading = false;
@@ -230,7 +228,6 @@ mixin AttendanceController on Model{
       }
 
     }catch(e) {
-      print(e);
       _isTakeAttendanceLoading = false;
       notifyListeners();
       return false;
