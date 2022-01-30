@@ -163,7 +163,11 @@ InOrOut inOutOption = InOrOut.checkIn;
                   ),
                   onPressed: () async {
                     if(model.isTakeAttendanceLoading == false) {
-                      bool _valid = await model.takeAttendance(inOutOption == InOrOut.checkIn ? 'ON' : 'OFF', int.parse(model.selectedCourse!.id!));
+                      bool _valid = await model.takeAttendance(
+                        inOutOption == InOrOut.checkIn ? 'ON' : 'OFF',
+                        int.parse(model.selectedCourse!.id!),
+                        model.instructorOrStudent! ? true : false
+                      );
                       if(_isSecondEnabled == false) {
                         ScaffoldMessenger.of(context).showSnackBar(snack('Verify Location First', Colors.red));
                       }else if(_valid) {

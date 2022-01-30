@@ -45,7 +45,16 @@ class _ProfileState extends State<Profile> {
       elevation: 3.0,
       color: Colors.white,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-      child: Column(
+      child: model.instructorOrStudent! ? 
+      Column(
+        children: [
+          profileItem(Icons.person, '${model.instructorUserModel!.userName}'),
+          profileItem(Icons.info, 'Id: ${model.instructorUserModel!.id}'),
+          profileItem(Icons.email, 'Email: ${model.instructorUserModel!.email}'),
+          profileItem(Icons.phone, 'Mobile Number: ${model.instructorUserModel!.mobileNumber}'),
+        ],
+      ) :
+      Column(
         children: [
           profileItem(Icons.person, '${model.userModel!.userName}'),
           profileItem(Icons.info, 'Id: ${model.userModel!.id}'),

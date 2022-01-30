@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:itgate/models/main_model.dart';
 import 'package:itgate/models/shared.dart';
 import 'package:itgate/screens/bottom_nav_bar.dart';
-import 'package:itgate/screens/login.dart';
+import 'package:itgate/screens/on_borad.dart';
 import 'package:itgate/theme/shared_color.dart';
 
 
@@ -59,21 +59,44 @@ void initState() {
      gotid = id;
    });
    if(id.isEmpty) {
-     Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) {return Login();}));
+     Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) {return OnBoard();}));
    }else{
-     bool _valid = await checkPath(id, widget.model);
-     if(_valid == true) {
-       Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) {return BottomNavBar();}));
+     String instructorOrStudent = await Shared.getSavedId('instructor');
+     if (instructorOrStudent == 'true') {
+       bool _valid = await checkInstructorPath(id, widget.model);
+       if(_valid == true) {
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) {return InstructorBottomNavBar();}));
+      }
+     } else {
+      bool _valid = await checkStdPath(id, widget.model);
+      if(_valid == true) {
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) {return BottomNavBar();}));
+      }
      }
    }
   }
 
-  Future<bool> checkPath(String id, MainModel model) async {
+  Future<bool> checkStdPath(String id, MainModel model) async {
     try{
-      bool _valid = await model.login(id);
+      bool _valid = await model.studentLogin(id);
       await model.getAllCourses();
       await model.getAboutData();
       await model.getStdCourses(id);
+      if(_valid == true) {
+        return true;
+      }else{
+        return false;
+      }
+    }catch(e) {
+      return false;
+    }
+  }
+
+  Future<bool> checkInstructorPath(String id, MainModel model) async {
+    try{
+      bool _valid = await model.instructorLogin(id);
+      await model.getInstructorCourses(id);
+      await model.getAboutData();
       if(_valid == true) {
         return true;
       }else{

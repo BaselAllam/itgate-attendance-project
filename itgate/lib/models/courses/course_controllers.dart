@@ -16,8 +16,14 @@ mixin CoursesController on Model{
   bool _isGetStdCoursesLoading = false;
   bool get isGetStdCoursesLoading => _isGetStdCoursesLoading;
 
+  bool _isGetInstructorCoursesLoading = false;
+  bool get isGetInstructorCoursesLoading => _isGetInstructorCoursesLoading;
+
   List<CourseModel> _allStdCourses = [];
   List<CourseModel> get allStdCourses => _allStdCourses;
+
+  List<CourseModel> _allInstructorCourses = [];
+  List<CourseModel> get allInstructorCourses => _allInstructorCourses;
 
 
   Future<bool> getAllCourses() async {
@@ -85,6 +91,38 @@ mixin CoursesController on Model{
           id: _savedValue == 'course' ? i['course_id'] : i['id']
         );
         _allStdCourses.add(_newCourse);
+      });
+
+      _isGetStdCoursesLoading = false;
+      notifyListeners();
+      return true;
+    }catch(e) {
+      _isGetStdCoursesLoading = false;
+      notifyListeners();
+      return false;
+    }
+  }
+
+
+  Future<bool> getInstructorCourses(String userId) async {
+
+    _isGetStdCoursesLoading = true;
+    notifyListeners();
+
+    try{
+
+      http.Response _res = await http.get(
+        Uri.parse('${Shared.domain}/inscourse.php?app_id=${userId.trim()}'),
+      );
+
+      var _data = json.decode(_res.body);
+
+      _data.forEach((i) {
+        CourseModel _newCourse = CourseModel(
+          courseName: i['Name'],
+          id: i['id']
+        );
+        _allInstructorCourses.add(_newCourse);
       });
 
       _isGetStdCoursesLoading = false;

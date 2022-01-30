@@ -32,17 +32,6 @@ class _HomePageState extends State<HomePage> {
                   style: primaryBlackFontStyle,
                 ),
               backgroundColor: Colors.white,
-              actions: [
-                IconButton(
-                  icon: Icon(Icons.settings),
-                  color: primaryColor,
-                  iconSize: 30.0,
-                  onPressed: () async {
-                    SharedPreferences _shared = await SharedPreferences.getInstance();
-                    _shared.clear();
-                  },
-                )
-              ]
             ),
             body: Container(
               margin: EdgeInsets.all(10.0),

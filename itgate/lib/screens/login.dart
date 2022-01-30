@@ -13,6 +13,13 @@ import 'package:scoped_model/scoped_model.dart';
 
 class Login extends StatefulWidget {
 
+  // true => student
+  // false => instructor
+
+  final bool studentOrInstructor;
+
+  Login(this.studentOrInstructor);
+
   @override
   _LoginState createState() => _LoginState();
 }
@@ -36,6 +43,23 @@ String diplomaOrCourse = '';
         child: ListView(
             scrollDirection: Axis.vertical,
             children: [
+              Align(
+                alignment: Alignment.topLeft,
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    color: secondaryColor,
+                    shape: BoxShape.circle,
+                  ),
+                  child: IconButton(
+                    icon: Icon(Icons.arrow_back_ios),
+                    color: Colors.white,
+                    iconSize: 30.0,
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                ),
+              ),
               Align(
                 alignment: Alignment.topCenter,
                 child: Text(
@@ -61,15 +85,15 @@ String diplomaOrCourse = '';
                 ),
               ),
               fields(
-                'Student Id',
-                'EX:324324',
+                widget.studentOrInstructor == true ? 'Student Id' : 'Instructor Id',
+                'EX:TGA-324324',
                 TextInputType.text,
                 idController,
                 idKey,
                 () => 
                 _updateLoginButton(),
                 ),
-                ListTile(
+                widget.studentOrInstructor ? ListTile(
                   title: Text(diplomaOrCourse.isEmpty ? 'Select Diploma Or Course' : '$diplomaOrCourse', style: TextStyle(color: blackColor, fontSize: 20.0)),
                   trailing: PopupMenuButton(
                     icon: Icon(Icons.arrow_downward, color: secondaryColor, size: 20.0),
@@ -91,39 +115,8 @@ String diplomaOrCourse = '';
                       });
                     }, 
                   ),
-                ),
-              ScopedModelDescendant(
-                builder: (context, child, MainModel model) {
-                  if(model.isUserLogin == true) {
-                    return Center(child: Loading());
-                  }else{
-                    return CustomButton(
-                      'Login',
-                      isEnabled,
-                      () async {
-                        if(idController.text.isEmpty) {
-                          ScaffoldMessenger.of(context).showSnackBar(snack('Some Fields Required', Colors.red));
-                        }else if(isEnabled == false) {
-                          ScaffoldMessenger.of(context).showSnackBar(snack('Some Fields Required', Colors.red));
-                        }else if(diplomaOrCourse.isEmpty) {
-                          ScaffoldMessenger.of(context).showSnackBar(snack('Choose Course or Diploma', Colors.red));
-                        }else{
-                          bool _isLoginValid = await model.login(idController.text.trim());
-                          if(_isLoginValid == true) {
-                            Shared.saveId('courseOrDiploma', diplomaOrCourse);
-                            bool _getDataValid = await model.getAboutData();
-                            bool _getCourseValid = await model.getAllCourses();
-                            bool _isGetStdCoursesValid = await model.getStdCourses(idController.text.trim());
-                            Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) {return BottomNavBar();}));
-                          }else{
-                            ScaffoldMessenger.of(context).showSnackBar(snack('Invalid Login', Colors.red));
-                          }
-                        }
-                      }
-                    );
-                  }
-                }
-              ),
+                ) : SizedBox(),
+              loginButton()
             ],
           ),
       ),
@@ -133,5 +126,71 @@ String diplomaOrCourse = '';
     setState(() {
       isEnabled = idController.text.isNotEmpty;
     });
+  }
+
+  loginButton() {
+    if (widget.studentOrInstructor) {
+      return ScopedModelDescendant(
+        builder: (context, child, MainModel model) {
+          if(model.isUserLogin == true) {
+            return Center(child: Loading());
+          }else{
+            return CustomButton(
+              'Login',
+              isEnabled,
+              () async {
+                if(idController.text.isEmpty) {
+                  ScaffoldMessenger.of(context).showSnackBar(snack('Some Fields Required', Colors.red));
+                }else if(isEnabled == false) {
+                  ScaffoldMessenger.of(context).showSnackBar(snack('Some Fields Required', Colors.red));
+                }else if(diplomaOrCourse.isEmpty) {
+                  ScaffoldMessenger.of(context).showSnackBar(snack('Choose Course or Diploma', Colors.red));
+                }else{
+                  bool _isLoginValid = await model.studentLogin(idController.text.trim());
+                  if(_isLoginValid == true) {
+                    Shared.saveId('courseOrDiploma', diplomaOrCourse);
+                    await model.getAboutData();
+                    await model.getAllCourses();
+                    await model.getStdCourses(idController.text.trim());
+                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) {return BottomNavBar();}));
+                  }else{
+                    ScaffoldMessenger.of(context).showSnackBar(snack('Invalid Login', Colors.red));
+                  }
+                }
+              }
+            );
+          }
+        }
+      );
+    } else {
+      return ScopedModelDescendant(
+        builder: (context, child, MainModel model) {
+          if (model.isInstructorUserLogin) {
+            return Center(child: Loading());
+          } else {
+            return CustomButton(
+              'Login',
+              isEnabled,
+              () async {
+                if (idController.text.isEmpty) {
+                  ScaffoldMessenger.of(context).showSnackBar(snack('Some Fields Required', Colors.red));
+                } else if (isEnabled == false) {
+                  ScaffoldMessenger.of(context).showSnackBar(snack('Some Fields Required', Colors.red));
+                } else {
+                  bool _isLoginValid = await model.instructorLogin(idController.text.trim());
+                  await model.getInstructorCourses(idController.text.trim());
+                  await model.getAboutData();
+                  if (_isLoginValid) {
+                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) {return InstructorBottomNavBar();}));
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(snack('Invalid Login', Colors.red));
+                  }
+                }
+              }
+            );
+          }
+        },
+      );
+    }
   }
 }

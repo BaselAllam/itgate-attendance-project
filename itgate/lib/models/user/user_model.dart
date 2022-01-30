@@ -1,7 +1,7 @@
 
 
 
-class UserModel{
+class StudentUserModel{
 
   String id;
   String userName;
@@ -9,11 +9,29 @@ class UserModel{
   String nationalNumber;
   String mobileNumber;
 
-  UserModel({
+  StudentUserModel({
     required this.id,
     required this.userName,
     required this.email,
     required this.nationalNumber,
+    required this.mobileNumber,
+  }); 
+}
+
+
+
+
+class InstructorUserModel{
+
+  String id;
+  String userName;
+  String email;
+  String mobileNumber;
+
+  InstructorUserModel({
+    required this.id,
+    required this.userName,
+    required this.email,
     required this.mobileNumber,
   }); 
 }
