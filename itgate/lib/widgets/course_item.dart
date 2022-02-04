@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:itgate/models/courses/courses_model.dart';
-import 'package:itgate/screens/course_attendance.dart';
 import 'package:itgate/theme/shared_color.dart';
 import 'package:itgate/theme/shared_font_style.dart';
 

@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:itgate/models/main_model.dart';
 import 'package:itgate/screens/course_attendance.dart';
-import 'package:itgate/theme/shared_color.dart';
 import 'package:itgate/theme/shared_font_style.dart';
 import 'package:itgate/widgets/loading.dart';
 import 'package:scoped_model/scoped_model.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 
 
