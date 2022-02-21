@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:itgate/Employee_App/main.dart';
 import 'package:itgate/models/main_model.dart';
 import 'package:itgate/screens/login.dart';
 import 'package:itgate/theme/shared_color.dart';
@@ -71,6 +72,13 @@ class _OnBoardState extends State<OnBoard> {
                   true,
                   () {
                     Navigator.push(context, MaterialPageRoute(builder: (_) {return Login(true);}));
+                  }
+                ),
+                CustomButton(
+                  'Employee',
+                  true,
+                  () {
+                    Navigator.push(context, MaterialPageRoute(builder: (_) {return Employee();}));
                   }
                 ),
               ]

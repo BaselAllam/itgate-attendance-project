@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:itgate/Employee_App/main.dart';
 import 'package:itgate/models/main_model.dart';
 import 'package:itgate/screens/splash.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 
@@ -15,6 +17,15 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+
+bool isEmp = false;
+
+@override
+void initState() {
+  checkEmp();
+  super.initState();
+}
+
   @override
   Widget build(BuildContext context) {
     return ScopedModel(
@@ -23,10 +34,25 @@ class _MyAppState extends State<MyApp> {
         builder: (context, child, MainModel model) {
           return MaterialApp(
             debugShowCheckedModeBanner: false,
-            home: SplashScreen(model)
+            home: isEmp ? Employee() : SplashScreen(model)
           );
         },
       ),
     );
+  }
+
+  checkEmp() async {
+
+    try {
+      SharedPreferences _check = await SharedPreferences.getInstance();
+      bool? _valid = _check.getBool('emp');
+      setState(() {
+        isEmp = _valid!;
+      });
+    } catch (e) {
+      setState(() {
+        isEmp = false;
+      });
+    }
   }
 }

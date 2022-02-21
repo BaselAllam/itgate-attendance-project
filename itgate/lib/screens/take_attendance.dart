@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:itgate/models/main_model.dart';
+import 'package:itgate/models/user/user_model.dart';
 import 'package:itgate/screens/scan_qr.dart';
 import 'package:itgate/theme/shared_color.dart';
 import 'package:itgate/theme/shared_font_style.dart';
@@ -166,7 +167,7 @@ InOrOut inOutOption = InOrOut.checkIn;
                       bool _valid = await model.takeAttendance(
                         inOutOption == InOrOut.checkIn ? 'ON' : 'OFF',
                         int.parse(model.selectedCourse!.id!),
-                        model.instructorOrStudent! ? true : false
+                        UserModel.isStudent ? false : true
                       );
                       if(_isSecondEnabled == false) {
                         ScaffoldMessenger.of(context).showSnackBar(snack('Verify Location First', Colors.red));

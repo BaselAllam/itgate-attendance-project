@@ -4,6 +4,7 @@ import 'package:itgate/models/shared.dart';
 import 'package:itgate/screens/bottom_nav_bar.dart';
 import 'package:itgate/screens/on_borad.dart';
 import 'package:itgate/theme/shared_color.dart';
+import 'package:scoped_model/scoped_model.dart';
 
 
 
@@ -19,91 +20,62 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
 
- String? gotid = '';
-
- Widget? routing;
-
-@override
-void initState() {
-  checkUser();
-  super.initState();
-}
-
+ @override
+ void initState() {
+   checkUser();
+   super.initState();
+ }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: Container(
-        margin: EdgeInsets.all(10.0),
-        alignment: Alignment.center,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            Image.asset('assets/logo.png', height: MediaQuery.of(context).size.height/2.5),
-            CircularProgressIndicator(
-              backgroundColor: primaryColor,
-              color: secondaryColor,
-            )
-          ],
-        ),
-      ),
+    return ScopedModelDescendant<MainModel>(
+      builder: (context, child, model) {
+        return Scaffold(
+          backgroundColor: Colors.white,
+          body: Container(
+            margin: EdgeInsets.all(10.0),
+            alignment: Alignment.center,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Image.asset('assets/logo.png', height: MediaQuery.of(context).size.height/2.5),
+                CircularProgressIndicator(
+                  backgroundColor: primaryColor,
+                  color: secondaryColor,
+                )
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 
   void checkUser() async {
 
    String id = await Shared.getSavedId('id');
-   setState(() {
-     gotid = id;
-   });
-   if(id.isEmpty) {
+
+   if (id.isEmpty) {
      Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) {return OnBoard();}));
-   }else{
+   } else {
      String instructorOrStudent = await Shared.getSavedId('instructor');
      if (instructorOrStudent == 'true') {
-       bool _valid = await checkInstructorPath(id, widget.model);
-       if(_valid == true) {
+      bool _valid = await ScopedModel.of<MainModel>(context).instructorLogin(id);
+       if (_valid == true) {
+         await ScopedModel.of<MainModel>(context).getInstructorCourses(id);
+         await ScopedModel.of<MainModel>(context).getAboutData();
         Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) {return InstructorBottomNavBar();}));
       }
      } else {
-      bool _valid = await checkStdPath(id, widget.model);
-      if(_valid == true) {
+      bool _valid = await ScopedModel.of<MainModel>(context).studentLogin(id);
+      if (_valid == true) {
+        await ScopedModel.of<MainModel>(context).getAllCourses();
+        await ScopedModel.of<MainModel>(context).getAboutData();
+        await ScopedModel.of<MainModel>(context).getStdCourses(id);
         Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) {return BottomNavBar();}));
       }
      }
    }
-  }
-
-  Future<bool> checkStdPath(String id, MainModel model) async {
-    try{
-      bool _valid = await model.studentLogin(id);
-      await model.getAllCourses();
-      await model.getAboutData();
-      await model.getStdCourses(id);
-      if(_valid == true) {
-        return true;
-      }else{
-        return false;
-      }
-    }catch(e) {
-      return false;
-    }
-  }
-
-  Future<bool> checkInstructorPath(String id, MainModel model) async {
-    try{
-      bool _valid = await model.instructorLogin(id);
-      await model.getInstructorCourses(id);
-      await model.getAboutData();
-      if(_valid == true) {
-        return true;
-      }else{
-        return false;
-      }
-    }catch(e) {
-      return false;
-    }
   }
 }

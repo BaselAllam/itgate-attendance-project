@@ -192,7 +192,7 @@ mixin AttendanceController on Model{
     }
   }
 
-  Future<bool> takeAttendance(String go, int courseId, bool instructorOrStudent) async {
+  Future<bool> takeAttendance(String go, int courseId, bool isInstructor) async {
 
     _isTakeAttendanceLoading = true;
     notifyListeners();
@@ -210,7 +210,7 @@ mixin AttendanceController on Model{
       };
 
       http.Response _res = await http.post(
-        instructorOrStudent ? 
+        isInstructor ? 
         Uri.parse('${Shared.domain}/ins_att.php') :
         Uri.parse('${Shared.domain}/courses_attend.php'),
         body: _sendingData

@@ -8,9 +8,8 @@ import 'package:itgate/theme/shared_font_style.dart';
 class CourseItem extends StatefulWidget {
 
 final CourseModel courseModel;
-final String type;
 
-CourseItem(this.courseModel, this.type);
+CourseItem(this.courseModel);
 
 
   @override
@@ -50,9 +49,6 @@ class _CourseItemState extends State<CourseItem> {
                 ),
               ),
               ListTile(
-                leading: CircleAvatar(
-                  backgroundImage: AssetImage('assets/logo.png'),
-                ),
                 title: Text(
                   '${widget.courseModel.courseName}',
                   style: primaryBlackFontStyle,
@@ -65,34 +61,57 @@ class _CourseItemState extends State<CourseItem> {
                 ),
                 trailing: InkWell(
                   onTap: () {
-                    showModalBottomSheet(
+                    showDialog(
                       context: context,
-                      backgroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(20.0), topRight: Radius.circular(20.0))),
                       builder: (BuildContext context) {
-                        return Container(
-                          margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0.0),
-                          child: ListView(
-                            children: [
-                              ListTile(
-                                leading: IconButton(
-                                  icon: Icon(Icons.close),
-                                  color: secondaryColor,
-                                  iconSize: 20.0,
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  }
+                        return Material(
+                          color: Colors.transparent,
+                          child: Container(
+                            margin: EdgeInsets.all(20.0),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20.0),
+                              color: Colors.white,
+                            ),
+                            padding: EdgeInsets.all(10.0),
+                            child: ListView(
+                              children: [
+                                Align(
+                                  alignment: Alignment.topRight,
+                                  child: IconButton(
+                                    icon: Icon(Icons.close),
+                                    color: secondaryColor,
+                                    iconSize: 20.0,
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                  ),
                                 ),
-                                title: Text(
-                                  '${widget.courseModel.courseName} | Description\n',
-                                  style: primaryBlackFontStyle,
+                                Container(
+                                  height: 150.0,
+                                  margin: EdgeInsets.only(bottom: 10.0, top: 10.0),
+                                  decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                      image: NetworkImage('https://www.itgateacademy.com/TGA/admin/layout/images/courses/${widget.courseModel.courseImg}'),
+                                      fit: BoxFit.fill
+                                    ),
+                                    borderRadius: BorderRadius.circular(20.0)
+                                  ),
                                 ),
-                              ),
-                              Text(
-                                '${widget.courseModel.courseDescription}',
-                                style: subTextStyle,
-                              ),
-                            ]
+                                ListTile(
+                                  title: Text(
+                                    '${widget.courseModel.courseName}',
+                                    style: primaryBlackFontStyle,
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(15.0),
+                                  child: Text(
+                                    'Description:\n${widget.courseModel.courseDescription}',
+                                    style: subTextStyle,
+                                  ),
+                                ),
+                              ]
+                            ),
                           ),
                         );
                       }

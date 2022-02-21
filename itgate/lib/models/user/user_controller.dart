@@ -7,6 +7,9 @@ import 'dart:convert';
 
 mixin UserController on Model{
 
+  StudentUserModel? stdModel;
+
+  InstructorUserModel? instructorUserModel;
 
   bool _isUserLogin = false;
   bool get isUserLogin => _isUserLogin;
@@ -14,18 +17,12 @@ mixin UserController on Model{
   bool _isInstructorUserLogin = false;
   bool get isInstructorUserLogin => _isInstructorUserLogin;
 
-  StudentUserModel? userModel;
-
-  InstructorUserModel? instructorUserModel;
-
-  bool? instructorOrStudent;
-
   Future<bool> studentLogin(String userId) async {
 
     _isUserLogin = true;
     notifyListeners();
 
-    try{
+    try {
       Map<String, dynamic> _senderData = {
       'user_ID' : userId
       };
@@ -36,26 +33,27 @@ mixin UserController on Model{
       );
 
       var _data = json.decode(_res.body);
-      if(_data == 'Wrong ID') {
+      
+      if (_data == 'Wrong ID') {
         _isUserLogin = false;
         notifyListeners();
         return false;
-      }else{
+      } else {
         await Shared.saveId('id', userId);
         await Shared.saveId('instructor', 'false');
-        instructorOrStudent = false;
-        userModel = StudentUserModel(
-          id: _data[0]['st_id'],
-          userName: _data[0]['name'],
-          email: _data[0]['email'],
-          nationalNumber: _data[0]['national_id'],
-          mobileNumber: _data[0]['phone'],
+        stdModel = StudentUserModel(
+          _data[0]['st_id'],
+          _data[0]['name'],
+          _data[0]['email'],
+          _data[0]['national_id'],
+          _data[0]['phone'],
         );
+        UserModel.isStudent = true;
         _isUserLogin = false;
         notifyListeners();
         return true;
       }
-    }catch(e){
+    } catch (e) {
       _isUserLogin = false;
       notifyListeners();
       return false;
@@ -68,7 +66,7 @@ mixin UserController on Model{
     _isInstructorUserLogin = true;
     notifyListeners();
 
-    try{
+    try {
       Map<String, dynamic> _senderData = {
       'user_ID' : userId
       };
@@ -79,25 +77,26 @@ mixin UserController on Model{
       );
 
       var _data = json.decode(_res.body);
-      if(_data == 'Wrong ID') {
+
+      if (_data == 'Wrong ID') {
         _isInstructorUserLogin = false;
         notifyListeners();
         return false;
-      }else{
+      } else {
+        instructorUserModel = InstructorUserModel(
+          _data[0]['id_s'],
+          _data[0]['Name'],
+          _data[0]['email'],
+          _data[0]['phone'],
+        );
         await Shared.saveId('id', userId);
         await Shared.saveId('instructor', 'true');
-        instructorOrStudent = true;
-        instructorUserModel = InstructorUserModel(
-          id: _data[0]['id_s'],
-          userName: _data[0]['Name'],
-          email: _data[0]['email'],
-          mobileNumber: _data[0]['phone'],
-        );
+        UserModel.isStudent = false;
         _isInstructorUserLogin = false;
         notifyListeners();
         return true;
       }
-    }catch(e){
+    } catch (e) {
       _isInstructorUserLogin = false;
       notifyListeners();
       return false;

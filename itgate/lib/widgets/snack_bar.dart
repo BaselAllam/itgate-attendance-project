@@ -6,6 +6,6 @@ SnackBar snack(String content, Color color) {
   return SnackBar(
     content: Text('$content'),
     backgroundColor: color,
-    duration: Duration(seconds: 4),
+    duration: Duration(seconds: 2),
   );
 }

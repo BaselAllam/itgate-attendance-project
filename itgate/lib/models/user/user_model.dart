@@ -1,37 +1,55 @@
 
 
-
-class StudentUserModel{
+class UserModel {
 
   String id;
   String userName;
-  String email;
-  String nationalNumber;
   String mobileNumber;
+  String email;
+  static bool isStudent = false;
 
-  StudentUserModel({
-    required this.id,
-    required this.userName,
-    required this.email,
-    required this.nationalNumber,
-    required this.mobileNumber,
-  }); 
+  UserModel(
+    this.id,
+    this.userName,
+    this.mobileNumber,
+    this.email,
+  );
+}
+
+
+class StudentUserModel extends UserModel {
+
+  String nationalNumber;
+
+  StudentUserModel(
+    id,
+    userName,
+    email,
+    this.nationalNumber,
+    mobileNumber,
+  ) : super(
+    id,
+    userName,
+    mobileNumber,
+    email,
+  );
 }
 
 
 
 
-class InstructorUserModel{
+class InstructorUserModel extends UserModel {
 
-  String id;
-  String userName;
-  String email;
-  String mobileNumber;
 
-  InstructorUserModel({
-    required this.id,
-    required this.userName,
-    required this.email,
-    required this.mobileNumber,
-  }); 
+  InstructorUserModel(
+    id,
+    userName,
+    email,
+    mobileNumber,
+  ) : super(
+    id,
+    userName,
+    mobileNumber,
+    email,
+  );
 }

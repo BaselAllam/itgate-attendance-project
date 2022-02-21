@@ -106,16 +106,20 @@ mixin CoursesController on Model{
 
   Future<bool> getInstructorCourses(String userId) async {
 
-    _isGetStdCoursesLoading = true;
+    _isGetInstructorCoursesLoading = true;
     notifyListeners();
 
     try{
+
+      print(userId);
 
       http.Response _res = await http.get(
         Uri.parse('${Shared.domain}/inscourse.php?app_id=${userId.trim()}'),
       );
 
       var _data = json.decode(_res.body);
+
+      print(_data);
 
       _data.forEach((i) {
         CourseModel _newCourse = CourseModel(
@@ -125,11 +129,11 @@ mixin CoursesController on Model{
         _allInstructorCourses.add(_newCourse);
       });
 
-      _isGetStdCoursesLoading = false;
+      _isGetInstructorCoursesLoading = false;
       notifyListeners();
       return true;
     }catch(e) {
-      _isGetStdCoursesLoading = false;
+      _isGetInstructorCoursesLoading = false;
       notifyListeners();
       return false;
     }

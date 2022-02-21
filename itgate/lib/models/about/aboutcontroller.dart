@@ -27,7 +27,7 @@ mixin AboutController on Model{
     _isGetAboutLoading = true;
     notifyListeners();
 
-    try{
+    try {
       http.Response _res = await http.get(Uri.parse('${Shared.domain}/getabout.php'));
 
       List _data = json.decode(_res.body);
@@ -37,7 +37,7 @@ mixin AboutController on Model{
       _isGetAboutLoading = false;
       notifyListeners();
       return true;
-    }catch(e) {
+    } catch (e) {
       _isGetAboutLoading = false;
       notifyListeners();
       return false;

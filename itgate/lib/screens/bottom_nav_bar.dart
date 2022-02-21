@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:itgate/models/main_model.dart';
 import 'package:itgate/screens/about_screen.dart';
 import 'package:itgate/screens/home_page.dart';
 import 'package:itgate/screens/instructor_home_page.dart';
@@ -6,12 +7,12 @@ import 'package:itgate/screens/our_courses.dart';
 import 'package:itgate/screens/profile.dart';
 import 'package:itgate/theme/shared_color.dart';
 import 'package:itgate/theme/shared_font_style.dart';
+import 'package:scoped_model/scoped_model.dart';
 
 
 
 
 class BottomNavBar extends StatefulWidget {
-  const BottomNavBar({ Key? key }) : super(key: key);
 
   @override
   _BottomNavBarState createState() => _BottomNavBarState();
@@ -19,7 +20,7 @@ class BottomNavBar extends StatefulWidget {
 
 class _BottomNavBarState extends State<BottomNavBar> {
 
-final List<Widget> screens = [
+List<Widget> screens = [
   HomePage(), OurCourses(), AboutScreen(), Profile(),
 ];
 
@@ -51,7 +52,11 @@ int current = 0;
           });
         },
       ),
-      body: screens[current],
+      body: ScopedModelDescendant(
+        builder: (context, child, MainModel model) {
+          return screens[current];
+        },
+      )
     );
   }
   BottomNavigationBarItem bottomItem(IconData icon, String label) {
@@ -65,7 +70,6 @@ int current = 0;
 
 
 class InstructorBottomNavBar extends StatefulWidget {
-  const InstructorBottomNavBar({ Key? key }) : super(key: key);
 
   @override
   _InstructorBottomNavBarState createState() => _InstructorBottomNavBarState();
@@ -73,7 +77,7 @@ class InstructorBottomNavBar extends StatefulWidget {
 
 class _InstructorBottomNavBarState extends State<InstructorBottomNavBar> {
 
-final List<Widget> screens = [
+List<Widget> screens = [
   InstructorHomePage(), AboutScreen(), Profile(),
 ];
 
@@ -104,7 +108,11 @@ int current = 0;
           });
         },
       ),
-      body: screens[current],
+      body: ScopedModelDescendant(
+        builder: (context, child, MainModel model) {
+          return body();
+        },
+      )
     );
   }
   BottomNavigationBarItem bottomItem(IconData icon, String label) {
@@ -112,5 +120,15 @@ int current = 0;
       icon: Icon(icon),
       label: label
     );
+  }
+
+  body() {
+    if (current == 0) {
+      return InstructorHomePage();
+    } else if (current == 1) {
+      return AboutScreen();
+    } else if (current == 2) {
+      return Profile();
+    }
   }
 }
