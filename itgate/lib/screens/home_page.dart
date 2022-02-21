@@ -33,17 +33,17 @@ class _HomePageState extends State<HomePage> {
                   style: primaryBlackFontStyle,
                 ),
               backgroundColor: Colors.white,
-              actions: [
-                IconButton(
-                  icon: Icon(Icons.close),
-                  color: secondaryColor,
-                  iconSize: 20.0,
-                  onPressed: () async {
-                    SharedPreferences _ok = await SharedPreferences.getInstance();
-                    _ok.clear();
-                  },
-                )
-              ]
+              // actions: [
+              //   IconButton(
+              //     icon: Icon(Icons.close),
+              //     color: secondaryColor,
+              //     iconSize: 20.0,
+              //     onPressed: () async {
+              //       SharedPreferences _ok = await SharedPreferences.getInstance();
+              //       _ok.clear();
+              //     },
+              //   )
+              // ]
             ),
             body: Container(
               margin: EdgeInsets.all(10.0),
