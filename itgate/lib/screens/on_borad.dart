@@ -65,20 +65,20 @@ class _OnBoardState extends State<OnBoard> {
                   'Instructor',
                   true,
                   () {
-                    Navigator.push(context, MaterialPageRoute(builder: (_) {return Login(false);}));}
+                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) {return Login(false);}));}
                 ),
                 CustomButton(
                   'Student',
                   true,
                   () {
-                    Navigator.push(context, MaterialPageRoute(builder: (_) {return Login(true);}));
+                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) {return Login(true);}));
                   }
                 ),
                 CustomButton(
                   'Employee',
                   true,
                   () {
-                    Navigator.push(context, MaterialPageRoute(builder: (_) {return Employee();}));
+                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) {return Employee();}));
                   }
                 ),
               ]

@@ -29,7 +29,7 @@ class _InstructorHomePageState extends State<InstructorHomePage> {
             appBar: AppBar(
               elevation: 0.0,
               title: Text(
-                  'Welcome',
+                  'Welcome ${model.instructorUserModel.userName}',
                   style: primaryBlackFontStyle,
                 ),
               backgroundColor: Colors.white,

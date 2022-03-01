@@ -5,11 +5,15 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 
-mixin UserController on Model{
+mixin UserController on Model {
 
-  StudentUserModel? stdModel;
+  StudentUserModel stdModel = StudentUserModel(
+    id: '', email: '', mobileNumber: '', nationalNumber: '', userName: ''
+  );
 
-  InstructorUserModel? instructorUserModel;
+  InstructorUserModel instructorUserModel = InstructorUserModel(
+    email: '', id: '', mobileNumber: '', userName: ''
+  );
 
   bool _isUserLogin = false;
   bool get isUserLogin => _isUserLogin;
@@ -41,13 +45,11 @@ mixin UserController on Model{
       } else {
         await Shared.saveId('id', userId);
         await Shared.saveId('instructor', 'false');
-        stdModel = StudentUserModel(
-          _data[0]['st_id'],
-          _data[0]['name'],
-          _data[0]['email'],
-          _data[0]['national_id'],
-          _data[0]['phone'],
-        );
+        stdModel.id = _data[0]['st_id'];
+        stdModel.userName = _data[0]['name'];
+        stdModel.email= _data[0]['email'];
+        stdModel.mobileNumber = _data[0]['national_id'];
+        stdModel.nationalNumber = _data[0]['phone'];
         UserModel.isStudent = true;
         _isUserLogin = false;
         notifyListeners();
@@ -83,12 +85,10 @@ mixin UserController on Model{
         notifyListeners();
         return false;
       } else {
-        instructorUserModel = InstructorUserModel(
-          _data[0]['id_s'],
-          _data[0]['Name'],
-          _data[0]['email'],
-          _data[0]['phone'],
-        );
+        instructorUserModel.id = _data[0]['id_s'];
+        instructorUserModel.userName = _data[0]['Name'];
+        instructorUserModel.email = _data[0]['email'];
+        instructorUserModel.mobileNumber = _data[0]['phone'];
         await Shared.saveId('id', userId);
         await Shared.saveId('instructor', 'true');
         UserModel.isStudent = false;

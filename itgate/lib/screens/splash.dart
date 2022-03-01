@@ -10,26 +10,22 @@ import 'package:scoped_model/scoped_model.dart';
 
 class SplashScreen extends StatefulWidget {
 
-  final MainModel model;
-
-  SplashScreen(this.model);
-
   @override
   _SplashScreenState createState() => _SplashScreenState();
 }
 
 class _SplashScreenState extends State<SplashScreen> {
 
- @override
- void initState() {
-   checkUser();
-   super.initState();
- }
+  @override
+  void initState() {
+    startProcess();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return ScopedModelDescendant<MainModel>(
-      builder: (context, child, model) {
+    return ScopedModelDescendant(
+      builder: (context, child, MainModel model) {
         return Scaffold(
           backgroundColor: Colors.white,
           body: Container(
@@ -52,7 +48,12 @@ class _SplashScreenState extends State<SplashScreen> {
     );
   }
 
-  void checkUser() async {
+  startProcess() {
+
+    Future.delayed(Duration(seconds: 1)).then((value) => checkUser());
+  }
+
+   checkUser() async {
 
    String id = await Shared.getSavedId('id');
 

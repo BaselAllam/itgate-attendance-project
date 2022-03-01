@@ -34,7 +34,7 @@ void initState() {
         builder: (context, child, MainModel model) {
           return MaterialApp(
             debugShowCheckedModeBanner: false,
-            home: isEmp ? Employee() : SplashScreen(model)
+            home: isEmp ? Employee() : SplashScreen()
           );
         },
       ),

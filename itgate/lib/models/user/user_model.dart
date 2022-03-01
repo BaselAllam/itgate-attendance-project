@@ -2,36 +2,36 @@
 
 class UserModel {
 
-  String id;
-  String userName;
-  String mobileNumber;
-  String email;
+  String? id;
+  String? userName;
+  String? mobileNumber;
+  String? email;
   static bool isStudent = false;
 
-  UserModel(
+  UserModel({
     this.id,
     this.userName,
     this.mobileNumber,
     this.email,
-  );
+  });
 }
 
 
 class StudentUserModel extends UserModel {
 
-  String nationalNumber;
+  String? nationalNumber;
 
-  StudentUserModel(
+  StudentUserModel({
     id,
     userName,
     email,
     this.nationalNumber,
     mobileNumber,
-  ) : super(
-    id,
-    userName,
-    mobileNumber,
-    email,
+  }) : super(
+    id: id,
+    userName: userName,
+    mobileNumber: mobileNumber,
+    email: email,
   );
 }
 
@@ -41,15 +41,15 @@ class StudentUserModel extends UserModel {
 class InstructorUserModel extends UserModel {
 
 
-  InstructorUserModel(
+  InstructorUserModel({
     id,
     userName,
     email,
     mobileNumber,
-  ) : super(
-    id,
-    userName,
-    mobileNumber,
-    email,
+  }) : super(
+    id: id,
+    userName: userName,
+    mobileNumber: mobileNumber,
+    email: email,
   );
 }
