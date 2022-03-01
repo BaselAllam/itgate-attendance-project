@@ -19,48 +19,54 @@ class _AttendanceWidgetState extends State<AttendanceWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.all(10.0),
+      margin: EdgeInsets.only(bottom: 20.0, top: 20.0),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(15.0),
+        borderRadius: BorderRadius.circular(10.0),
         color: Colors.grey[300]
       ),
-      child: Column(
-        children: [
-          Container(
-            height: 50.0,
-            padding: EdgeInsets.all(5.0),
-            margin: EdgeInsets.all(10.0),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(20.0),
-            ),
-            alignment: Alignment.center,
-            child: Text(
-              '${widget.attendanceModel.date} | ${widget.attendanceModel.day}',
-              textAlign: TextAlign.center,
-              style: TextStyle(color: blackColor, fontSize: 20.0, fontWeight: FontWeight.bold),
-            )
-          ),
-          Container(
-            width: MediaQuery.of(context).size.width - 140,
-            child: ListTile(
-              title: Padding(
-                padding: const EdgeInsets.only(top: 8.0, right: 8.0),
-                child: Text(
-                  'Check In      Check Out',
-                  style: primaryBlackFontStyle,
-                ),
-              ),
-              subtitle: Padding(
-                padding: const EdgeInsets.only(top: 8.0, right: 8.0),
-                child: Text(
-                  ' ${widget.attendanceModel.goin}                    ${widget.attendanceModel.goout}',
-                  style: secondaryTextStyle,
-                ),
+      child: ListTile(
+        leading: Icon(Icons.watch_later, color: secondaryColor, size: 25),
+        title: Text(
+          '${widget.attendanceModel.date} | ${widget.attendanceModel.day} :',
+          style: secondaryTextStyle
+        ),
+        subtitle: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Text(
+              'Check In  ',
+              style: TextStyle(
+                fontSize: 15,
+                color: Colors.grey,
+                fontWeight: FontWeight.normal
               ),
             ),
-          ),
-        ],
+            Text(
+              '${widget.attendanceModel.goin}   |   ',
+              style: TextStyle(
+                fontSize: 15,
+                color: primaryColor,
+                fontWeight: FontWeight.bold
+              ),
+            ),
+            Text(
+              'Check Out  ',
+              style: TextStyle(
+                fontSize: 15,
+                color: Colors.grey,
+                fontWeight: FontWeight.normal
+              ),
+            ),
+            Text(
+              '${widget.attendanceModel.goin}',
+              style: TextStyle(
+                fontSize: 15,
+                color: primaryColor,
+                fontWeight: FontWeight.bold
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
