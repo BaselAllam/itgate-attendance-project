@@ -58,7 +58,7 @@ class _AttendanceWidgetState extends State<AttendanceWidget> {
               ),
             ),
             Text(
-              '${widget.attendanceModel.goin}',
+              '${widget.attendanceModel.goout}',
               style: TextStyle(
                 fontSize: 15,
                 color: primaryColor,
