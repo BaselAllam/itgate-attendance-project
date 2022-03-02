@@ -73,6 +73,7 @@ class _InstructorHomePageState extends State<InstructorHomePage> {
                             model.allInstructorCourses[index].courseName!,
                             () {
                               model.getStdSelectedCourse(model.allInstructorCourses[index]);
+                              model.getInstructorCourseAttendance(model.instructorUserModel.id!, model.allInstructorCourses[index].id!);
                               Navigator.push(context, MaterialPageRoute(builder: (_) {return CourseAttendance(model);}));
                             }
                           );

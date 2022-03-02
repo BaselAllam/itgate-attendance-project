@@ -111,15 +111,11 @@ mixin CoursesController on Model{
 
     try{
 
-      print(userId);
-
       http.Response _res = await http.get(
         Uri.parse('${Shared.domain}/inscourse.php?app_id=${userId.trim()}'),
       );
 
       var _data = json.decode(_res.body);
-
-      print(_data);
 
       _data.forEach((i) {
         CourseModel _newCourse = CourseModel(

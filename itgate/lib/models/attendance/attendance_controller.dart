@@ -107,6 +107,45 @@ mixin AttendanceController on Model{
     }
   }
 
+  Future<bool> getInstructorCourseAttendance(String userId, String courseId) async {
+
+    _isGetAttendanceLoading = true;
+    notifyListeners();
+
+    try{
+      Map<String, dynamic> _sendingData = {
+        'course_id' : courseId,
+        'app_id' : userId,
+      };
+
+      http.Response _res = await http.post(
+        Uri.parse('${Shared.domain}/allins_attend.php'),
+        body: _sendingData
+      );
+
+      List _data = json.decode(_res.body);
+
+      _data.forEach((i) {
+        AttendanceModel _newAttendance = AttendanceModel(
+          id: i['id'],
+          day: i['day'],
+          date: i['date'],
+          goin: i['goin'],
+          goout: i['goout']
+        );
+        _allAttendance.add(_newAttendance);
+      });
+      _isGetAttendanceLoading = false;
+      notifyListeners();
+      return true;
+
+    }catch(e) {
+      _isGetAttendanceLoading = false;
+      notifyListeners();
+      return false;
+    }
+  }
+
 
   Future<bool> _validateLocation(double userLat, double userLong) async {
 

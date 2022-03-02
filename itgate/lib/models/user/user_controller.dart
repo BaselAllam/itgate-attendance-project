@@ -85,7 +85,7 @@ mixin UserController on Model {
         notifyListeners();
         return false;
       } else {
-        instructorUserModel.id = _data[0]['id_s'];
+        instructorUserModel.id = _data[0]['ins_id'];
         instructorUserModel.userName = _data[0]['Name'];
         instructorUserModel.email = _data[0]['email'];
         instructorUserModel.mobileNumber = _data[0]['phone'];
