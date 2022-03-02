@@ -117,6 +117,8 @@ mixin CoursesController on Model{
 
       var _data = json.decode(_res.body);
 
+      print(_data);
+
       _data.forEach((i) {
         CourseModel _newCourse = CourseModel(
           courseName: i['Name'],
