@@ -21,6 +21,7 @@ class _OnBoardState extends State<OnBoard> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
+        color: Colors.white,
         margin: EdgeInsets.all(10.0),
         child: ScopedModelDescendant(
           builder: (context, child, MainModel model) {

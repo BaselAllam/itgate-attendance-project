@@ -43,24 +43,9 @@ String diplomaOrCourse = '';
         child: ListView(
             scrollDirection: Axis.vertical,
             children: [
-              Align(
-                alignment: Alignment.topLeft,
-                child: DecoratedBox(
-                  decoration: BoxDecoration(
-                    color: secondaryColor,
-                    shape: BoxShape.circle,
-                  ),
-                  child: IconButton(
-                    icon: Icon(Icons.arrow_back_ios),
-                    color: Colors.white,
-                    iconSize: 30.0,
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                  ),
-                ),
-              ),
-              Align(
+              Container(
+                height: 100,
+                margin: EdgeInsets.only(top: 20),
                 alignment: Alignment.topCenter,
                 child: Text(
                   '\nIt Gate Academy',
